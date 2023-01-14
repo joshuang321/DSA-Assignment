@@ -19,7 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Account.cpp" />
+    <ClCompile Include="Post.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Stack.cpp" />
+    <ClCompile Include="Topic.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Account.h" />
+    <ClInclude Include="Post.h" />
+    <ClInclude Include="Stack.h" />
+    <ClInclude Include="Topic.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

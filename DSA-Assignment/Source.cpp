@@ -1,4 +1,7 @@
 #include <iostream>
+#include <string>
+#include <stdio.h>
+
 #ifdef __WINDOWS
 #include <Windows.h>
 #endif
@@ -58,6 +61,7 @@ void __cdecl win32_atexit()
 }
 #endif
 
+//function to print the main menu
 void printMenu()
 {
 	std::cout << "==========Menu==========" << std::endl
