@@ -3,21 +3,26 @@
 #include <iostream>
 
 //stack ADT using nodes
+
+template <class T>
 class Stack {
 private:
 	struct Node {
-		Post item;
-		Node* next;
+		T item;
+		Stack<T>::Node* next;
+
+		Node() : next(NULL) { }
 	};
-	Node* topNode;
+	Stack<T>::Node* topNode;
 
 public:
 	Stack();
 	~Stack();
 
-	bool push(Post item);
+	bool push(T item);
 	bool pop();
-	bool pop(Post& item);
-	void getTop(Post& item);
+	bool pop(T& item);
+	void getTop(T& item);
 	bool isEmpty();
+	bool sort(bool (*cmp_func)(T& item1, T& item2));
 };
