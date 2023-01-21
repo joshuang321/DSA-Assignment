@@ -6,14 +6,12 @@ class Account {
 private:
 	std::string username;
 	std::string password;
-
-	//methods
+		
 public:
-	Account();
-	Account(std::string, std::string);
+	Account(std::string username, std::string password);
+	Account() { }
 
-	void setUsername(std::string);
-	std::string getUsername();
-	void setPassword(std::string);
-	std::string getPassword();
+	static bool findAccount(std::string username, std::string password);
+	static bool findUser(std::string username);
+	static void saveAccount(Account& acc);
 };
