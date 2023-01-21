@@ -16,6 +16,7 @@ int main(void)
 {
 	Application app;
 
+	/* Sets up virtual terminal processing for the console output */
 	if (!GetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE),
 		&dwOldConsoleMode))
 	{
@@ -37,5 +38,6 @@ int main(void)
 
 void __cdecl win32_atexit()
 {
+	/* Resets console output mode back to normal */
 	SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), dwOldConsoleMode);
 }
