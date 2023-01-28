@@ -282,7 +282,7 @@ void Application::handleViewTopic(string topicName)
 		{
 			printViewTopicMenu(topic);
 			getline(cin, choice);
-			if (handleViewTopicMenu(topic, choice))
+			if (!handleViewTopicMenu(topic, choice))
 				break;
 		}
 	}
