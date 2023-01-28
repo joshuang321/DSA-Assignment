@@ -34,8 +34,6 @@ int main(void)
 	return app.Run();
 }
 
-
-
 void __cdecl win32_atexit()
 {
 	/* Resets console output mode back to normal */

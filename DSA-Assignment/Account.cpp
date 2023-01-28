@@ -10,6 +10,8 @@ Account::Account(std::string username, std::string password) : username(username
 {
 }
 
+std::string Account::getUsername() { return username; }
+
 bool Account::findAccount(std::string username, std::string password)
 {
 	std::string _name, _password;
@@ -59,7 +61,7 @@ bool Account::findUser(std::string username)
 void Account::saveAccount(Account& acc)
 {
 	std::filesystem::path fsPath = std::filesystem::current_path();
-	fsPath += AccSaveFilename;
+	fsPath += std::string("//") + AccSaveFilename;
 
 	bool isExisting;
 
