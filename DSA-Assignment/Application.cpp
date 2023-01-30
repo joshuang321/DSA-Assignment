@@ -205,7 +205,7 @@ bool Application::promptForRegisterUser()
 
 bool Application::handleChangePassword()
 {
-	string oldPassword, newPassword, checkPassword;
+	string oldPassword, newPassword;
 
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	
@@ -220,27 +220,14 @@ bool Application::handleChangePassword()
 		cout << "Enter new password: ";
 		getline(cin, newPassword);
 
-		cout << "Re-enter new password: ";
-		getline(cin, checkPassword);
+		accDA.removeObject(acc);
+		acc = Account(acc.getUsername(), newPassword);
+		accDA.addObject(acc);
 
-		if (newPassword == checkPassword)
-		{
-			accDA.removeObject(acc);
-			acc = Account(acc.getUsername(), newPassword);
-			accDA.addObject(acc);
-
-			cout << clrsr << fggreen << "Password changed successfully!" << endl;
-			Sleep(SLP_UI_DEPLAY);
-			cout << clrsr;
-			return true;
-		}
-		else
-		{
-			cout << clrsr << fgred << "New passwords do not match!" << endl;
-			Sleep(SLP_UI_DEPLAY);
-			cout << clrsr;
-			return false;
-		}
+		cout << clrsr << fggreen << "Password changed successfully!" << endl;
+		Sleep(SLP_UI_DEPLAY);
+		cout << clrsr;
+		return true;
 	}
 	else
 	{
