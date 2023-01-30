@@ -148,9 +148,8 @@ bool Application::promptForLoginUser()
 	cout << "Password: ";
 	getline(cin, password);
 
-	if (Account::findAccount(username, password))
+	if (accDA.findUser(acc, username, password))
 	{
-		acc = Account(username, password);
 		cout << clrsr << fggreen << "Logged In Successfully!" << endl;
 		Sleep(SLP_UI_DEPLAY);
 		cout << clrsr;
@@ -173,12 +172,14 @@ bool Application::promptForRegisterUser()
 	cout << "Password: ";
 	getline(cin, password);
 
-	if (!Account::findUser(username))
+	if (!accDA.findUser(username))
 	{
 		acc = Account(username, password);
-		Account::saveAccount(acc);
+		accDA.addObject(acc);
 
-		cout << clrsr << "Account Registered Successfully!" << endl;
+		cout << clrsr << fggreen << "Account Registered Successfully!" << endl;
+		Sleep(SLP_UI_DEPLAY);
+		cout << clrsr;
 		return true;
 	}
 	
@@ -193,7 +194,7 @@ void Application::handleViewTopics()
 {
 	std::string choice;
 	cout << clrsr;
-	Vector<string> topicNames = Topic::getTopics();
+	Vector<string> topicNames = topicDA.getTopics();
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 	while (true)
@@ -222,7 +223,7 @@ void Application::printViewTopicsMenu(Vector<string>& topicNames)
 	}
 	cout << restore;
 }
-bool Application::handleViewTopicsMenu(Vector<string>&  topicNames, string choice)
+bool Application::handleViewTopicsMenu(Vector<string>& topicNames, string choice)
 {
 	int nIndex;
 
@@ -237,7 +238,7 @@ bool Application::handleViewTopicsMenu(Vector<string>&  topicNames, string choic
 	{
 		nIndex = atoi(choice.c_str());
 		if (nIndex && topicNames.count() >= nIndex)
-			handleViewTopic(topicNames[nIndex - 1]);
+			handleViewTopic(nIndex-1);
 		else
 		{
 			cout << fgred << "Invalid Input! Please try again!" << grdefault;
@@ -259,32 +260,28 @@ void Application::promptNewTopic(Vector<string>& topicNames)
 	cout << "Topic Description: ";
 	getline(cin, topicdesc);
 
-	if (!Topic::findTopic(topictitle))
+	if (!topicDA.findTopic(topictitle))
 	{
-		Topic topic(topictitle, topicdesc, acc.getUsername());
-		Topic::saveTopic(topic);
-
+		topicDA.addObject(Topic(topictitle, topicdesc, acc.getUsername()));
 		topicNames.push(topictitle);
 	}
 	else
 	{
 		cout << fgred << "Failed to create an already existing Topic!" << grdefault;
+		Sleep(SLP_UI_DEPLAY);
 	}
 }
 
-void Application::handleViewTopic(string topicName)
+void Application::handleViewTopic(int nIndex)
 {
 	string choice;
-	Topic topic;
-	if (Topic::getTopic(topicName, topic))
+	Topic& topic = topicDA.getTopic(nIndex);
+	while (true)
 	{
-		while (true)
-		{
-			printViewTopicMenu(topic);
-			getline(cin, choice);
-			if (!handleViewTopicMenu(topic, choice))
-				break;
-		}
+		printViewTopicMenu(topic);
+		getline(cin, choice);
+		if (!handleViewTopicMenu(topic, choice))
+			break;
 	}
 }
 
@@ -294,7 +291,7 @@ void Application::printViewTopicMenu(Topic& topic)
 		<< endl << topic.getTitle() << endl
 		<< "Created at " << topic.getTimeCreated() << endl
 		<< "Created by " << topic.getUsername() << endl
-		<< endl
+		<< topic.getLikes() << " Likes" << endl
 		<< topic.getDescription() << endl << endl
 		<< "Your choice? " << save;
 }

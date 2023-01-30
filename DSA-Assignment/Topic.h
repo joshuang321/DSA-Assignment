@@ -13,25 +13,24 @@ private:
 	std::string description;
 	std::string username;
 	std::time_t timeCreated;
+	int likes;
 	Vector<Post> posts;
 
-	Topic(std::string title, std::string description, std::string username, std::time_t timeCreated);
-
-	//methods
 public:
 	Topic();
+	Topic(const Topic& topic);
 	Topic(std::string title, std::string description, std::string username);
+	Topic(std::string strline);
+
+
 
 	void addNewPost(Post& newPost);
-
-	static bool findTopic(std::string topicName);
-	static bool getTopic(std::string topicName, Topic &topic);
-	static void saveTopic(Topic& topic);
-
-	static Vector<std::string> getTopics();
 
 	std::string getTitle();
 	std::string getDescription();
 	std::string getUsername();
 	std::string getTimeCreated();
+	int getLikes();
+
+	friend std::ostream& operator<<(std::ostream& os, Topic& topic);
 };

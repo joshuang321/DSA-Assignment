@@ -1,5 +1,6 @@
 #pragma once
-#include <iostream>
+
+#include <string>
 
 class Account {
 	//attributes
@@ -10,10 +11,10 @@ private:
 public:
 	Account(std::string username, std::string password);
 	Account() { }
+	Account(std::string strline);
 
 	std::string getUsername();
+	bool isCorrect(std::string password);
 
-	static bool findAccount(std::string username, std::string password);
-	static bool findUser(std::string username);
-	static void saveAccount(Account& acc);
+	friend std::ostream& operator<<(std::ostream& os, Account& acc);
 };

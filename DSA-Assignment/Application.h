@@ -4,6 +4,9 @@
 #include "Topic.h"
 #include "Stack.h"
 
+#include "AccountDA.h"
+#include "TopicDA.h"
+
 #include <string>
 
 
@@ -12,6 +15,9 @@ class Application
 private:
 	Account acc;
 	bool isLoggedIn;
+
+	AccountDA accDA;
+	TopicDA topicDA;
 
 public:
 	Application();
@@ -32,7 +38,7 @@ public:
 	bool handleViewTopicsMenu(Vector<std::string>& topicNames, std::string choice);
 	void promptNewTopic(Vector<std::string>& topicNames);
 
-	void handleViewTopic(std::string topicName);
+	void handleViewTopic(int nIndex);
 	void printViewTopicMenu(Topic& topic);
 	bool handleViewTopicMenu(Topic& topic, std::string choice);
 };
