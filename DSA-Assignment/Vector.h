@@ -41,6 +41,14 @@ public:
 		ptr[nElementCount++] = item;
 	}
 
+	void pop(T item)
+	{
+		if (nElementCount == 0)
+			return;
+
+		nElementCount--;
+	}
+
 	int count() { return nElementCount; }
 
 	T& operator[](int nIndex) { return ptr[nIndex]; }

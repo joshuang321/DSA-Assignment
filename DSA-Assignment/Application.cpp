@@ -58,6 +58,7 @@ int Application::Run()
 		else
 			printLoginMenu();
 
+		//prompt for user input to log out or see topics
 		cin >> choice;
 		cout << clrsr;
 
@@ -70,6 +71,7 @@ int Application::Run()
 	return 0;
 }
 
+//function to print the login menu
 void Application::printLoginMenu()
 {
 	cout << fggreen << "==========" << fgblue << "LOGIN MENU" << fggreen << "==========" << grdefault << std::endl
@@ -79,6 +81,7 @@ void Application::printLoginMenu()
 		<< "Your choice? ";
 }
 
+//function to print the main menu (logged in)
 void Application::printMainMenu()
 {
 	cout << fgyellow << "Logged in as " << acc.getUsername() << endl << endl
@@ -86,6 +89,7 @@ void Application::printMainMenu()
 		<< grdefault << std::endl
 		<< "[1] Log Out" << std::endl
 		<< "[2] See Topics" << std::endl
+		<< "[3] Change Password" << std::endl
 		<< "Your choice? ";
 }
 
@@ -121,12 +125,19 @@ void Application::handleMainMenu(int choice)
 {
 	switch (choice)
 	{
+		//if user chooses to log out
 	case 1:
 		isLoggedIn = false;
 		break;
 	
+		//if user chooses to view all topics in the forum
 	case 2:
 		handleViewTopics();
+		break;
+
+		//if user chooses to change password
+	case 3:
+		handleChangePassword();
 		break;
 
 	default:
@@ -167,11 +178,13 @@ bool Application::promptForRegisterUser()
 	string username, password;
 
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	//prompt user for new username and password
 	cout << "Username: ";
 	getline(cin, username);
 	cout << "Password: ";
 	getline(cin, password);
 
+	//check if there is existing account with username input
 	if (!accDA.findUser(username))
 	{
 		acc = Account(username, password);
@@ -188,6 +201,54 @@ bool Application::promptForRegisterUser()
 	cout << clrsr;
 
 	return false;
+}
+
+bool Application::handleChangePassword()
+{
+	string oldPassword, newPassword, checkPassword;
+
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	
+	//prompt user for old password
+	cout << "Enter old password: ";
+	getline(cin, oldPassword);
+
+	bool oldMatch = acc.isCorrect(oldPassword);
+
+	if (oldMatch)
+	{
+		cout << "Enter new password: ";
+		getline(cin, newPassword);
+
+		cout << "Re-enter new password: ";
+		getline(cin, checkPassword);
+
+		if (newPassword == checkPassword)
+		{
+			accDA.removeObject(acc);
+			acc = Account(acc.getUsername(), newPassword);
+			accDA.addObject(acc);
+
+			cout << clrsr << fggreen << "Password changed successfully!" << endl;
+			Sleep(SLP_UI_DEPLAY);
+			cout << clrsr;
+			return true;
+		}
+		else
+		{
+			cout << clrsr << fgred << "New passwords do not match!" << endl;
+			Sleep(SLP_UI_DEPLAY);
+			cout << clrsr;
+			return false;
+		}
+	}
+	else
+	{
+		cout << clrsr << fgred << "Old password does not match!" << endl;
+		Sleep(SLP_UI_DEPLAY);
+		cout << clrsr;
+		return false;
+	}
 }
 
 void Application::handleViewTopics()
@@ -207,6 +268,7 @@ void Application::handleViewTopics()
 	}
 }
 
+//when you select option "2" in the main menu
 void Application::printViewTopicsMenu(Vector<string>& topicNames)
 {
 	cout << "[" << fgred << "E" << grdefault << "] Go Back to Main Menu" << endl
@@ -223,6 +285,7 @@ void Application::printViewTopicsMenu(Vector<string>& topicNames)
 	}
 	cout << restore;
 }
+
 bool Application::handleViewTopicsMenu(Vector<string>& topicNames, string choice)
 {
 	int nIndex;

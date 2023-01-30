@@ -32,6 +32,7 @@ public:
 
 	bool promptForLoginUser();
 	bool promptForRegisterUser();
+	bool handleChangePassword();
 
 	void handleViewTopics();
 	void printViewTopicsMenu(Vector<std::string>& topicNames);

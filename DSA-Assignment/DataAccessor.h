@@ -34,4 +34,5 @@ protected:
 
 public:
 	void addObject(T obj) { cacheData.push(obj); }
+	void removeObject(T obj) { cacheData.pop(obj); }
 };
