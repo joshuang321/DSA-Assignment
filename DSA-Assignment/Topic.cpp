@@ -9,7 +9,7 @@
 
 static const char* TopicSaveFilename = "Topics.txt";
 
-Topic::Topic() : title(), description(), username(), timeCreated(), posts() { }
+Topic::Topic() : title(), description(), username(), timeCreated(), likes(), posts() { }
 
 Topic::Topic(const Topic& topic) :
 	title(topic.title),
@@ -83,4 +83,9 @@ std::ostream& operator<<(std::ostream& os, Topic& topic)
 	os << topic.title << ';' << topic.description << ';' << topic.username
 		<< ';' << topic.getTimeCreated() << ';' << topic.likes;
 	return os;
+}
+
+bool Topic::operator==(Topic& topic)
+{
+	return topic.title == title;
 }

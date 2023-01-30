@@ -46,6 +46,15 @@ public:
 		if (nElementCount == 0)
 			return;
 
+		for (int i=0; i<nElementCount; i++)
+		{
+			if (item == ptr[i])
+			{
+				for (int j = i + 1; i < nElementCount; i++)
+					ptr[j - 1] = std::move(ptr[j]);
+			}
+		}
+
 		nElementCount--;
 	}
 

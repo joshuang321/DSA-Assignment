@@ -33,4 +33,5 @@ public:
 	int getLikes();
 
 	friend std::ostream& operator<<(std::ostream& os, Topic& topic);
+	bool operator==(Topic& acc);
 };

@@ -7,8 +7,8 @@ static const char* AccSaveFilename = "Accounts.dat";
 
 Account::Account(std::string username, std::string password) : username(username),
 	password(password)
-{
-}
+{ }
+
 Account::Account(std::string strline)
 {
 	int ndelim = strline.find(';');
@@ -24,4 +24,9 @@ std::ostream& operator<<(std::ostream& os, Account& acc)
 {
 	os << acc.username << ';' << acc.password;
 	return os;
+}
+
+bool Account::operator==(Account& acc)
+{
+	return acc.username == username;
 }
