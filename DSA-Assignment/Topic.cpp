@@ -36,27 +36,30 @@ Topic::Topic(std::string strline)
 	std::string strtimeCreated = strline;
 	tm _tm;
 
+	//replaces .split() function
 	ndelim = strline.find(';');
 	title = strline.substr(0, ndelim);
 	strline = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
+
 	ndelim = strline.find(';');
 	description = strline.substr(0, ndelim);
 	strline = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
+
 	ndelim = strline.find(';');
 	username = strline.substr(0, ndelim);
-
-
 	strline = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
+
 	ndelim = strline.find(';');
 	strtimeCreated = strline;
 	strline = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
+
 	likes = atoi(strline.c_str());
 
 	std::istringstream(strtimeCreated.c_str()) >> std::get_time(&_tm, "%Y-%m-%d %H:%M:%S");
 	timeCreated = std::mktime(&_tm);
 }
 
-void Topic::addNewPost(Post& newPost) { posts.push(newPost); }
+void Topic::addNewPost(Post newPost) { posts.push(newPost); }
 
 std::string Topic::getTitle() { return title; }
 
@@ -77,6 +80,8 @@ std::string Topic::getTimeCreated()
 }
 
 int Topic::getLikes() { return likes; }
+
+void Topic::addLike() { likes++; }
 
 std::ostream& operator<<(std::ostream& os, Topic& topic)
 {

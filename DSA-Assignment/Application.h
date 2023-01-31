@@ -2,7 +2,6 @@
 #include "Account.h"
 #include "Vector.h"
 #include "Topic.h"
-#include "Stack.h"
 
 #include "AccountDA.h"
 #include "TopicDA.h"
@@ -40,7 +39,14 @@ public:
 	void promptNewTopic(Vector<std::string>& topicNames);
 
 	void handleViewTopic(int nIndex);
+	//displays topics and posts
 	void printViewTopicMenu(Topic& topic);
 	bool handleViewTopicMenu(Topic& topic, std::string choice);
+	void promptNewPost(Topic& topic);
+
+	void handleViewPost(Post& post, std::string username);
+	void printViewPostMenu(Post& post);
+	bool handleViewPostMenu(Post& post, std::string username, std::string choice);
+	void promptNewReply(Post& post);
 };
 

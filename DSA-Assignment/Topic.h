@@ -14,23 +14,23 @@ private:
 	std::string username;
 	std::time_t timeCreated;
 	int likes;
-	Vector<Post> posts;
 
 public:
+	Vector<Post> posts;
+
 	Topic();
 	Topic(const Topic& topic);
 	Topic(std::string title, std::string description, std::string username);
 	Topic(std::string strline);
 
-
-
-	void addNewPost(Post& newPost);
+	void addNewPost(Post newPost);
 
 	std::string getTitle();
 	std::string getDescription();
 	std::string getUsername();
 	std::string getTimeCreated();
 	int getLikes();
+	void addLike();
 
 	friend std::ostream& operator<<(std::ostream& os, Topic& topic);
 	bool operator==(Topic& acc);

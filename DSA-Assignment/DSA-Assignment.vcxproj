@@ -33,7 +33,6 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="DataAccessor.h" />
     <ClInclude Include="Post.h" />
-    <ClInclude Include="Stack.h" />
     <ClInclude Include="Topic.h" />
     <ClInclude Include="TopicDA.h" />
     <ClInclude Include="Vector.h" />

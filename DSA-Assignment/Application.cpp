@@ -337,19 +337,122 @@ void Application::handleViewTopic(int nIndex)
 
 void Application::printViewTopicMenu(Topic& topic)
 {
-	cout << clrsr << "[" << fgred << "E" << grdefault << "] Go back to other Topics" << endl 
-		<< endl << topic.getTitle() << endl
-		<< "Created at " << topic.getTimeCreated() << endl
-		<< "Created by " << topic.getUsername() << endl
-		<< topic.getLikes() << " Likes" << endl
+	cout << "[" << fgred << "E" << grdefault << "] Go back to other Topics" << endl 
+		<< "[" << fgblue << "L" << grdefault << "] Like Topic" << endl
+		<< "[" << fggreen << "R" << grdefault << "] Create a new Post" << endl << endl
+		<< endl << "Title: " << topic.getTitle() << endl
+		<< "----------------" << endl
+		<< "Created at: " << topic.getTimeCreated() << endl
+		<< "Created by: " << topic.getUsername() << endl
+		<< "----------------" << endl
 		<< topic.getDescription() << endl << endl
+		<< topic.getLikes() << " Likes" << endl << endl
 		<< "Your choice? " << save;
+
+	for (int i = 0; i < topic.posts.count(); i++)
+	{
+		cout << endl << endl << '[' << i + 1 << "] " << topic.posts[i].getText() << endl
+			<< "Created by: " << topic.posts[i].getUsername() << endl
+			<< "----------------" << endl << endl
+			<< topic.posts[i].getLikes() << " Likes" << endl << endl;
+	}
+
+	cout << restore;
 }
 
 bool Application::handleViewTopicMenu(Topic& topic, string choice)
 {
+	int nIndex;
+
 	if ("E" == choice)
 		return false;
+	else if ("L" == choice)
+		topic.addLike();
+	else if ("R" == choice)
+		promptNewPost(topic);
+	else
+	{
+		nIndex = atoi(choice.c_str());
+		if (nIndex && topic.posts.count() >= nIndex)
+			handleViewPost(topic.posts[nIndex - 1], topic.getUsername());
+		else
+		{
+			cout << fgred << "Invalid Input! Please try again!" << grdefault;
+			Sleep(SLP_UI_DEPLAY);
+			cout << restore;
+		}
+	}
 
 	return true;
+}
+
+void Application::promptNewPost(Topic& topic)
+{
+	std::string postText;
+
+	cout << clrsr << "Enter text: ";
+	getline(cin, postText);
+	cout << clrsr;
+
+	topic.addNewPost(Post(postText, acc.getUsername()));
+}
+
+void Application::handleViewPost(Post& post, std::string username)
+{
+	std::string choice;
+	cout << clrsr;
+
+	while (true) 
+	{
+		printViewPostMenu(post);
+
+		getline(cin, choice);
+		if (!handleViewPostMenu(post, username, choice))
+			break;
+	}
+}
+
+void Application::printViewPostMenu(Post& post)
+{
+	cout << "[" << fgred << "E" << grdefault << "] Go Back to Main Menu" << endl
+		<< "[" << fgblue << "L" << grdefault << "] Like Post" << endl
+		<< "[" << fggreen << "R" << grdefault << "] Create a new Reply" << endl << endl
+		<< post.getText() << endl << endl
+		<< "----------------" << endl
+		<< "Created at: " << post.getTimeCreated() << endl
+		<< "Created by: " << post.getUsername() << endl
+		<< "----------------" << endl << endl
+		<< post.getLikes() << " Likes" << endl << endl
+		<< "Your Choice? " << save;
+
+	cout << endl << post.reply;
+	cout << restore;
+}
+
+bool Application::handleViewPostMenu(Post& post, std::string username, std::string choice)
+{
+	if ("E" == choice)
+		return false;
+	else if ("L" == choice)
+	{
+		post.addLike();
+
+		cout << clrsr;
+	}
+	else if ("R" == choice)
+		promptNewReply(post);
+
+	return true;
+}
+
+void Application::promptNewReply(Post& post)
+{
+	std::string postreply;
+
+	cout << "Enter reply: ";
+	getline(cin, postreply);
+
+	post.reply = postreply;
+
+	cout << clrsr;
 }
