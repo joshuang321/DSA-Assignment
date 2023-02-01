@@ -84,8 +84,23 @@ void Application::printLoginMenu()
 //function to print the main menu (logged in)
 void Application::printMainMenu()
 {
-	cout << fgyellow << "Logged in as " << acc.getUsername() << endl << endl
-		<< fggreen << "==========" << fgblue << "Weclome to the C++ Programming Forum!" << fggreen << "=========="
+	cout << fgyellow << "Logged in as " << acc.getUsername() << grdefault << endl;
+
+	cout << R"(_________________________________________________________
+_________________________________________________________
+________/\\\\\\\\\_______________________________________  
+______/\\\////////_______/\\\__________/\\\______________
+______/\\\/______________\/\\\_________\/\\\_____________
+______/\\\_____________/\\\\\\\\\\\__/\\\\\\\\\\\________ 
+______\/\\\____________\///////////__\///////////________    
+_______\//\\\________________\/\\\_________\/\\\_________
+________\///\\\______________\///__________\///__________
+___________\////\\\\\\\\\________________________________
+_______________\/////////________________________________
+_________________________________________________________
+)" << endl;
+
+	cout << fggreen << "==========" << fgblue << "Weclome to the C++ Programming Forum!" << fggreen << "=========="
 		<< grdefault << std::endl
 		<< "[1] Log Out" << std::endl
 		<< "[2] See Topics" << std::endl
@@ -411,6 +426,8 @@ void Application::handleViewPost(Post& post, std::string username)
 		if (!handleViewPostMenu(post, username, choice))
 			break;
 	}
+
+	cout << clrsr;
 }
 
 void Application::printViewPostMenu(Post& post)
