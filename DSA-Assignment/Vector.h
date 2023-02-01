@@ -33,7 +33,8 @@ public:
 			maxElements += 4;
 			T* new_ptr = new T[maxElements];
 
-			memcpy_s(new_ptr, sizeof(T) * maxElements, ptr, sizeof(T) * nElementCount);
+			for (int i = 0; i < nElementCount; i++)
+				new_ptr[i] = T(ptr[i]);
 			delete[] ptr;
 			ptr = new_ptr;
 		}
