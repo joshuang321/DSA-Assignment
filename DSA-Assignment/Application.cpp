@@ -325,6 +325,7 @@ void Application::promptNewTopic(Vector<string>& topicNames)
 void Application::handleViewTopic(int nIndex)
 {
 	string choice;
+	cout << clrsr;
 	Topic& topic = topicDA.getTopic(nIndex);
 	while (true)
 	{
