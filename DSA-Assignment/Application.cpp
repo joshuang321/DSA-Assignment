@@ -383,7 +383,11 @@ bool Application::handleViewTopicMenu(Topic& topic, string choice)
 	if ("E" == choice)
 		return false;
 	else if ("L" == choice)
+	{
 		topic.addLike();
+
+		cout << clrsr;
+	}
 	else if ("R" == choice)
 		promptNewPost(topic);
 	else
