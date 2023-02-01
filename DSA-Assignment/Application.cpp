@@ -78,7 +78,7 @@ void Application::printLoginMenu()
 		<< "[1] Login" << std::endl
 		<< "[2] Register" << std::endl
 		<< "[3] Exit" << std::endl
-		<< "Your choice? ";
+		<< fgmagenta << "Your choice? " << grdefault;
 }
 
 //function to print the main menu (logged in)
@@ -90,7 +90,7 @@ void Application::printMainMenu()
 		<< "[1] Log Out" << std::endl
 		<< "[2] See Topics" << std::endl
 		<< "[3] Change Password" << std::endl
-		<< "Your choice? ";
+		<< fgmagenta << "Your choice? " << grdefault;
 }
 
 bool Application::handleLoginMenu(int choice)
@@ -260,7 +260,7 @@ void Application::printViewTopicsMenu(Vector<string>& topicNames)
 {
 	cout << "[" << fgred << "E" << grdefault << "] Go Back to Main Menu" << endl
 		<< "[" << fggreen << "C" << grdefault << "] Create a new Topic" << endl << endl
-		<< "Your Choice? " << save;
+		<< fgmagenta << "Your Choice? " << grdefault << save;
 
 	cout << go_down_vts(3) << set_x_pos_vts(0);
 
@@ -348,11 +348,11 @@ void Application::printViewTopicMenu(Topic& topic)
 		<< "----------------" << endl
 		<< topic.getDescription() << endl << endl
 		<< topic.getLikes() << " Likes" << endl << endl
-		<< "Your choice? " << save;
+		<< fgmagenta << "Your choice? " << grdefault << save;
 
 	for (int i = 0; i < topic.posts.count(); i++)
 	{
-		cout << endl << endl << '[' << i + 1 << "] " << topic.posts[i].getText() << endl
+		cout << endl << endl << fgyellow << '[' << i + 1 << "] " << topic.posts[i].getText() <<  grdefault << endl
 			<< "Created by: " << topic.posts[i].getUsername() << endl
 			<< "----------------" << endl << endl
 			<< topic.posts[i].getLikes() << " Likes" << endl << endl;
@@ -418,15 +418,15 @@ void Application::printViewPostMenu(Post& post)
 	cout << "[" << fgred << "E" << grdefault << "] Go Back to Main Menu" << endl
 		<< "[" << fgblue << "L" << grdefault << "] Like Post" << endl
 		<< "[" << fggreen << "R" << grdefault << "] Create a new Reply" << endl << endl
-		<< post.getText() << endl << endl
+		<< post.getText() << endl
 		<< "----------------" << endl
 		<< "Created at: " << post.getTimeCreated() << endl
 		<< "Created by: " << post.getUsername() << endl
 		<< "----------------" << endl << endl
 		<< post.getLikes() << " Likes" << endl << endl
-		<< "Your Choice? " << save;
+		<< fgmagenta << "Your Choice? " << grdefault << save;
 
-	cout << endl << post.reply;
+	cout << endl << endl << fgyellow << "Reply:" << grdefault << endl << post.reply;
 	cout << restore;
 }
 
