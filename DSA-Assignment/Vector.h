@@ -34,7 +34,7 @@ public:
 			T* new_ptr = new T[maxElements];
 
 			for (int i = 0; i < nElementCount; i++)
-				new_ptr[i] = T(ptr[i]);
+				new_ptr[i] = std::move(ptr[i]);
 			delete[] ptr;
 			ptr = new_ptr;
 		}
