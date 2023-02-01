@@ -14,6 +14,7 @@ using namespace std;
 static const char* clrsr = "\x1B[2J\x1B[H";
 static const char* save = "\x1B[s";
 static const char* restore = "\x1B[u";
+static const char* delline = "\x1B[2K";
 
 /* Resets the text to default rendering */
 static const char* grdefault = "\x1B[0m";
@@ -42,6 +43,11 @@ static std::string go_down_vts(int nAmount)
 static std::string set_x_pos_vts(int nPosition)
 {
 	return "\x1B[" + std::to_string(nPosition) + "G";
+}
+
+static std::string set_prev_n_line_vts(int nLine)
+{
+	return "\x1b[" + std::to_string(nLine) + "F";
 }
 
 Application::Application() : isLoggedIn(false) { }
@@ -200,9 +206,9 @@ bool Application::promptForRegisterUser()
 		getline(cin, username);
 		if (username.length() > 0)
 			break;
-		cout << clrsr << fgred << "Username cannot be empty!" << grdefault;
+		cout << fgred << "Username cannot be empty!" << grdefault;
 		Sleep(SLP_UI_DEPLAY);
-		cout << clrsr;
+		cout << delline << set_prev_n_line_vts(1) << delline;
 	}
 	while (true)
 	{
@@ -210,9 +216,9 @@ bool Application::promptForRegisterUser()
 		getline(cin, password);
 		if (password.length() > 0)
 			break;
-		cout << clrsr << fgred << "Password cannot be empty!" << grdefault;
+		cout << fgred << "Password cannot be empty!" << grdefault;
 		Sleep(SLP_UI_DEPLAY);
-		cout << clrsr;
+		cout << delline << set_prev_n_line_vts(1) << delline;
 	}
 
 	//check if there is existing account with username input
