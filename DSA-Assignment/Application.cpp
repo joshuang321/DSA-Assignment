@@ -194,10 +194,26 @@ bool Application::promptForRegisterUser()
 
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	//prompt user for new username and password
-	cout << "Username: ";
-	getline(cin, username);
-	cout << "Password: ";
-	getline(cin, password);
+	while (true)
+	{
+		cout << "Username: ";
+		getline(cin, username);
+		if (username.length() > 0)
+			break;
+		cout << clrsr << fgred << "Username cannot be empty!" << grdefault;
+		Sleep(SLP_UI_DEPLAY);
+		cout << clrsr;
+	}
+	while (true)
+	{
+		cout << "Password: ";
+		getline(cin, password);
+		if (password.length() > 0)
+			break;
+		cout << clrsr << fgred << "Password cannot be empty!" << grdefault;
+		Sleep(SLP_UI_DEPLAY);
+		cout << clrsr;
+	}
 
 	//check if there is existing account with username input
 	if (!accDA.findUser(username))
