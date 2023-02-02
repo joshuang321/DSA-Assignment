@@ -12,7 +12,7 @@
 class Application
 {
 private:
-	Account acc;
+	Account* acc;
 	bool isLoggedIn;
 
 	AccountDA accDA;

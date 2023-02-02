@@ -18,6 +18,7 @@ static const char* delline = "\x1B[2K";
 
 /* Resets the text to default rendering */
 static const char* grdefault = "\x1B[0m";
+static const char* grunderline = "\x1B[4m";
 
 /* Sets the foreground color */
 static const char* fgred = "\x1B[91m";
@@ -27,7 +28,7 @@ static const char* fgblue = "\x1B[94m";
 static const char* fgmagenta = "\x1B[95m";
 static const char* fgcyan = "\x1B[96m";
 
-static const int SLP_UI_DEPLAY = 700;
+static const int SLP_UI_DELAY = 700;
 
 /* Neat function that returns when printed goes up/down nAmount */
 static std::string go_up_vts(int nAmount)
@@ -81,16 +82,16 @@ int Application::Run()
 void Application::printLoginMenu()
 {
 	cout << fggreen << "==========" << fgblue << "LOGIN MENU" << fggreen << "==========" << grdefault << std::endl
-		<< "[1] Login" << std::endl
+		<< "[" << fgred << "1" << grdefault << "] Exit" << std::endl
 		<< "[2] Register" << std::endl
-		<< "[3] Exit" << std::endl
+		<< "[3] Login" << std::endl
 		<< fgmagenta << "Your choice? " << grdefault;
 }
 
 //function to print the main menu (logged in)
 void Application::printMainMenu()
 {
-	cout << fgyellow << "Logged in as " << acc.getUsername() << grdefault << endl;
+	cout << fgyellow << "Logged in as " << acc->getUsername() << grdefault << endl;
 
 	cout << R"(_________________________________________________________
 _________________________________________________________
@@ -108,7 +109,7 @@ _________________________________________________________
 
 	cout << fggreen << "==========" << fgblue << "Weclome to the C++ Programming Forum!" << fggreen << "=========="
 		<< grdefault << std::endl
-		<< "[1] Log Out" << std::endl
+		<< "[" << fgred << "1" << grdefault << "] Log Out" << std::endl
 		<< "[2] See Topics" << std::endl
 		<< "[3] Change Password" << std::endl
 		<< fgmagenta << "Your choice? " << grdefault;
@@ -119,21 +120,20 @@ bool Application::handleLoginMenu(int choice)
 	switch (choice)
 	{
 	case 1:
-
-		isLoggedIn = promptForLoginUser();
-		break;
+		cout << fgmagenta << "Goodbye!" << grdefault << endl;
+		return false;
 
 	case 2:
 		isLoggedIn = promptForRegisterUser();
 		break;
 
 	case 3:
-		cout << fgmagenta << "Goodbye!" << grdefault << endl;
-		return false;
+		isLoggedIn = promptForLoginUser();
+		break;
 
 	default:
 		cout << fgred << "Invalid Option!" << grdefault << endl;
-		Sleep(SLP_UI_DEPLAY);
+		Sleep(SLP_UI_DELAY);
 		cout << clrsr;
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -163,7 +163,7 @@ void Application::handleMainMenu(int choice)
 
 	default:
 		cout << fgred << "Invalid Option!" << grdefault << endl;
-		Sleep(SLP_UI_DEPLAY);
+		Sleep(SLP_UI_DELAY);
 		cout << clrsr;
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -183,13 +183,13 @@ bool Application::promptForLoginUser()
 	if (accDA.findUser(acc, username, password))
 	{
 		cout << clrsr << fggreen << "Logged In Successfully!" << endl;
-		Sleep(SLP_UI_DEPLAY);
+		Sleep(SLP_UI_DELAY);
 		cout << clrsr;
 		return true;
 	}
 
 	cout << clrsr << fgred << "Failed to Log In!" << endl;
-	Sleep(SLP_UI_DEPLAY);
+	Sleep(SLP_UI_DELAY);
 	cout << clrsr;
 	return false;
 }
@@ -207,7 +207,7 @@ bool Application::promptForRegisterUser()
 		if (username.length() > 0)
 			break;
 		cout << fgred << "Username cannot be empty!" << grdefault;
-		Sleep(SLP_UI_DEPLAY);
+		Sleep(SLP_UI_DELAY);
 		cout << delline << set_prev_n_line_vts(1) << delline;
 	}
 	while (true)
@@ -217,24 +217,23 @@ bool Application::promptForRegisterUser()
 		if (password.length() > 0)
 			break;
 		cout << fgred << "Password cannot be empty!" << grdefault;
-		Sleep(SLP_UI_DEPLAY);
+		Sleep(SLP_UI_DELAY);
 		cout << delline << set_prev_n_line_vts(1) << delline;
 	}
 
 	//check if there is existing account with username input
 	if (!accDA.findUser(username))
 	{
-		acc = Account(username, password);
-		accDA.addObject(acc);
+		acc = accDA.addObject(Account(username, password));
 
 		cout << clrsr << fggreen << "Account Registered Successfully!" << endl;
-		Sleep(SLP_UI_DEPLAY);
+		Sleep(SLP_UI_DELAY);
 		cout << clrsr;
 		return true;
 	}
 	
 	cout << clrsr << fgred << "There exists an account with the same username! Please try again!" << endl;
-	Sleep(SLP_UI_DEPLAY + 200);
+	Sleep(SLP_UI_DELAY + 200);
 	cout << clrsr;
 
 	return false;
@@ -250,26 +249,26 @@ bool Application::handleChangePassword()
 	cout << "Enter old password: ";
 	getline(cin, oldPassword);
 
-	bool oldMatch = acc.isCorrect(oldPassword);
+	bool oldMatch = acc->isCorrect(oldPassword);
 
 	if (oldMatch)
 	{
 		cout << "Enter new password: ";
 		getline(cin, newPassword);
 
-		accDA.removeObject(acc);
-		acc = Account(acc.getUsername(), newPassword);
-		accDA.addObject(acc);
+		std::string accname = acc->getUsername();
+		accDA.removeObject(*acc);
+		acc = accDA.addObject(Account(accname, newPassword));
 
 		cout << clrsr << fggreen << "Password changed successfully!" << endl;
-		Sleep(SLP_UI_DEPLAY);
+		Sleep(SLP_UI_DELAY);
 		cout << clrsr;
 		return true;
 	}
 	else
 	{
 		cout << clrsr << fgred << "Old password does not match!" << endl;
-		Sleep(SLP_UI_DEPLAY);
+		Sleep(SLP_UI_DELAY);
 		cout << clrsr;
 		return false;
 	}
@@ -299,13 +298,14 @@ void Application::printViewTopicsMenu(Vector<string>& topicNames)
 		<< "[" << fggreen << "C" << grdefault << "] Create a new Topic" << endl << endl
 		<< fgmagenta << "Your Choice? " << grdefault << save;
 
-	cout << go_down_vts(3) << set_x_pos_vts(0);
+	cout << go_down_vts(3) << set_x_pos_vts(0)
+		<< fgcyan << "Topics:" << grdefault << endl;
 
 	for (int i = 0;
 		i < topicNames.count();
 		i++)
 	{
-		cout << '[' << i + 1 << "] " << topicNames[i] << endl;
+		cout << fgyellow << '[' << i + 1 << "] " << grunderline << topicNames[i] << grdefault << endl;
 	}
 	cout << restore;
 }
@@ -329,7 +329,7 @@ bool Application::handleViewTopicsMenu(Vector<string>& topicNames, string choice
 		else
 		{
 			cout << fgred << "Invalid Input! Please try again!" << grdefault;
-			Sleep(SLP_UI_DEPLAY);
+			Sleep(SLP_UI_DELAY);
 			cout << restore;
 		}
 	}
@@ -349,13 +349,13 @@ void Application::promptNewTopic(Vector<string>& topicNames)
 
 	if (!topicDA.findTopic(topictitle))
 	{
-		topicDA.addObject(Topic(topictitle, topicdesc, acc.getUsername()));
+		topicDA.addObject(Topic(topictitle, topicdesc, acc->getUsername()));
 		topicNames.push(topictitle);
 	}
 	else
 	{
 		cout << fgred << "Failed to create an already existing Topic!" << grdefault;
-		Sleep(SLP_UI_DEPLAY);
+		Sleep(SLP_UI_DELAY);
 	}
 }
 
@@ -375,23 +375,25 @@ void Application::handleViewTopic(int nIndex)
 
 void Application::printViewTopicMenu(Topic& topic)
 {
-	cout << "[" << fgred << "E" << grdefault << "] Go back to other Topics" << endl 
+	cout << "[" << fgred << "E" << grdefault << "] Go back to other Topics" << endl
 		<< "[" << fgblue << "L" << grdefault << "] Like Topic" << endl
 		<< "[" << fggreen << "R" << grdefault << "] Create a new Post" << endl << endl
-		<< endl << "Title: " << topic.getTitle() << endl
-		<< "----------------" << endl
-		<< "Created at: " << topic.getTimeCreated() << endl
+		<< endl << grunderline << fgyellow << topic.getTitle() << grdefault << endl
 		<< "Created by: " << topic.getUsername() << endl
-		<< "----------------" << endl
-		<< topic.getDescription() << endl << endl
-		<< topic.getLikes() << " Likes" << endl << endl
+		<< "Created at: " << topic.getTimeCreated() << endl
+		<< topic.getLikes() << " Likes" << endl
+		<< grunderline << "                                        " << grdefault << endl
+		<< fgyellow << topic.getDescription() << grdefault << endl << endl
 		<< fgmagenta << "Your choice? " << grdefault << save;
+
+	cout << go_down_vts(3) << set_x_pos_vts(0)
+		<< fgcyan << "Posts:" << grdefault;
 
 	for (int i = 0; i < topic.posts.count(); i++)
 	{
-		cout << endl << endl << fgyellow << '[' << i + 1 << "] " << topic.posts[i].getText() <<  grdefault << endl
-			<< "Created by: " << topic.posts[i].getUsername() << endl
-			<< "----------------" << endl << endl
+		cout << endl << fgyellow << '[' << i + 1 << "] " << grunderline << topic.posts[i].getText() <<  grdefault << endl
+			<< "Posted by " << topic.posts[i].getUsername() << endl
+			<< "Posted at " << topic.posts[i].getTimeCreated() << endl
 			<< topic.posts[i].getLikes() << " Likes" << endl << endl;
 	}
 
@@ -420,7 +422,7 @@ bool Application::handleViewTopicMenu(Topic& topic, string choice)
 		else
 		{
 			cout << fgred << "Invalid Input! Please try again!" << grdefault;
-			Sleep(SLP_UI_DEPLAY);
+			Sleep(SLP_UI_DELAY);
 			cout << restore;
 		}
 	}
@@ -436,7 +438,7 @@ void Application::promptNewPost(Topic& topic)
 	getline(cin, postText);
 	cout << clrsr;
 
-	topic.addNewPost(Post(postText, acc.getUsername()));
+	topic.addNewPost(Post(postText, acc->getUsername()));
 }
 
 void Application::handleViewPost(Post& post, std::string username)
@@ -461,15 +463,14 @@ void Application::printViewPostMenu(Post& post)
 	cout << "[" << fgred << "E" << grdefault << "] Go Back to Main Menu" << endl
 		<< "[" << fgblue << "L" << grdefault << "] Like Post" << endl
 		<< "[" << fggreen << "R" << grdefault << "] Create a new Reply" << endl << endl
-		<< post.getText() << endl
-		<< "----------------" << endl
-		<< "Created at: " << post.getTimeCreated() << endl
-		<< "Created by: " << post.getUsername() << endl
-		<< "----------------" << endl << endl
+		<< fgyellow << grunderline << post.getText() << grdefault <<  endl
+		<< "Posted at: " << post.getTimeCreated() << endl
+		<< "Posted by: " << post.getUsername() << endl
 		<< post.getLikes() << " Likes" << endl << endl
 		<< fgmagenta << "Your Choice? " << grdefault << save;
 
-	cout << endl << endl << fgyellow << "Reply:" << grdefault << endl << post.reply;
+	cout << go_down_vts(3) << set_x_pos_vts(0)
+		<< fgcyan << "Replies:" << grdefault << endl << post.reply;
 	cout << restore;
 }
 

@@ -3,11 +3,31 @@
 #include <fstream>
 #include <filesystem>
 
+#include <Windows.h>
+
 static const char* AccSaveFilename = "Accounts.dat";
 
 Account::Account(std::string username, std::string password) : username(username),
 	password(password)
 { }
+
+Account::Account(const Account& acc) :
+	username(acc.username),
+	password(acc.password)
+{
+#if defined(_DEBUG)
+	OutputDebugStringA("Account_CC\n");
+#endif
+}
+
+Account::Account(Account&& acc) :
+	username(std::move(acc.username)),
+	password(std::move(acc.password))
+{
+#if defined(_DEBUG)
+	OutputDebugStringA("Account_MC\n");
+#endif
+}
 
 Account::Account(std::string strline)
 {

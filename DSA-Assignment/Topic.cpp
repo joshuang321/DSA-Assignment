@@ -17,9 +17,26 @@ Topic::Topic(const Topic& topic) :
 	username(topic.username),
 	timeCreated(topic.timeCreated),
 	likes(topic.likes),
-	posts()
+	posts(topic.posts)
 {
+#if defined (_DEBUG)
+	OutputDebugStringA("Topic_CC\n");
+#endif
 }
+
+Topic::Topic(Topic&& topic) :
+	title(std::move(topic.title)),
+	description(std::move(topic.description)),
+	username(std::move(topic.username)),
+	timeCreated(std::move(topic.timeCreated)),
+	likes(std::move(topic.likes)),
+	posts(std::move(topic.posts))
+{
+#if defined(_DEBUG)
+	OutputDebugStringA("Topic_MC\n");
+#endif
+}
+
 
 Topic::Topic(std::string title, std::string description, std::string username) :
 	title(title),
@@ -59,7 +76,7 @@ Topic::Topic(std::string strline)
 	timeCreated = std::mktime(&_tm);
 }
 
-void Topic::addNewPost(Post newPost) { posts.push(newPost); }
+void Topic::addNewPost(Post newPost) { posts.push(std::move(newPost)); }
 
 std::string Topic::getTitle() { return title; }
 

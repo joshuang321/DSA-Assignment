@@ -6,14 +6,14 @@ static const char* AccSaveFilename = "Accounts.txt";
 AccountDA::AccountDA() : DataAccessor<Account>(AccSaveFilename)
 { }
 
-bool AccountDA::findUser(Account& acc, std::string username, std::string password)
+bool AccountDA::findUser(Account*& pAcc, std::string username, std::string password)
 {
 	for (int i = 0; i < cacheData.count(); i++)
 	{
 		if (username == cacheData[i].getUsername() &&
 			cacheData[i].isCorrect(password))
 		{
-			acc = cacheData[i];
+			pAcc = &cacheData[i];
 			return true;
 		}
 	}

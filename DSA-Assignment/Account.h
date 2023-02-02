@@ -9,12 +9,13 @@ private:
 	std::string password;
 		
 public:
-	Account(std::string username, std::string password);
 	Account() { }
 	Account(std::string strline);
-	Account(const Account&) = default;
-	Account& operator=(const Account&) = default;
+	Account(const Account&);
 	Account(Account&& acc);
+
+	Account(std::string username, std::string password);
+	Account& operator=(const Account&) = default;
 
 	std::string getUsername();
 	bool isCorrect(std::string password);

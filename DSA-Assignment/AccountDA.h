@@ -7,6 +7,6 @@ class AccountDA : public DataAccessor<Account>
 {	
 public:
 	AccountDA();
-	bool findUser(Account& acc, std::string username, std::string password);
+	bool findUser(Account*& pAcc, std::string username, std::string password);
 	bool findUser(std::string username);
 };

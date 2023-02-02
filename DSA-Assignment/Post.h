@@ -3,31 +3,33 @@
 #include <ctime>
 #include "Account.h"
 
-using namespace std;
 //
 class Post {
 	//attributes
 private:
-	string text;
+	std::string text;
 	time_t timeCreated;
-	string username;
+	std::string username;
 	int likes;
 
 public:
-	string reply;
+	std::string reply;
 
 	Post();
 	Post(const Post& post);
-	Post(string text, string username);
-	Post(string strline);
+	Post& operator=(const Post & post) = default;
+	Post(Post&& post);
+	
+	Post(std::string text, std::string username);
+	Post(std::string strline);
 
 
-	string getText();
-	string getTimeCreated();
-	string getUsername();
+	std::string getText();
+	std::string getTimeCreated();
+	std::string getUsername();
 	int getLikes();
 	void addLike();
 
-	friend ostream& operator << (ostream& os, Post& post);
+	friend std::ostream & operator << (std::ostream & os, Post & post);
 	bool operator==(Post& acc);
 };

@@ -1,9 +1,12 @@
+#pragma once
 #include "Post.h"
 #include <fstream>
 #include <string>
 #include <chrono>
 #include <filesystem>
 #include <sstream>
+
+#include <Windows.h>
 
 using namespace std;
 
@@ -18,6 +21,21 @@ Post::Post(const Post& post) :
 	reply(post.reply),
 	likes(post.likes)
 {
+#if defined (_DEBUG)
+	OutputDebugStringA("Post_CC\n");
+#endif
+}
+
+Post::Post(Post&& post) :
+	text(std::move(post.text)),
+	timeCreated(std::move(post.timeCreated)),
+	username(std::move(post.username)),
+	reply(std::move(post.reply)),
+	likes(std::move(post.likes))
+{
+#if defined (_DEBUG)
+	OutputDebugStringA("Post_MC\n");
+#endif
 }
 
 Post::Post(string text, string username) :
@@ -26,8 +44,7 @@ Post::Post(string text, string username) :
 	username(username),
 	reply(reply),
 	likes(0)
-{
-}
+{ }
 
 Post::Post(string strline)
 {

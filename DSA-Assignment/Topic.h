@@ -20,6 +20,9 @@ public:
 
 	Topic();
 	Topic(const Topic& topic);
+	Topic& operator=(const Topic & topic) = default;
+	Topic(Topic&& topic);
+
 	Topic(std::string title, std::string description, std::string username);
 	Topic(std::string strline);
 
