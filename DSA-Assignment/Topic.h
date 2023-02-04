@@ -24,7 +24,7 @@ public:
 	Topic(std::string title, std::string description, std::string username);
 	Topic(std::string strline);
 
-	void addNewPost(Post newPost);
+	void addNewPost(Post&& newPost);
 	std::string getDescription();
 
 	friend std::ostream& operator<<(std::ostream& os, Topic& topic);

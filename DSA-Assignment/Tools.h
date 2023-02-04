@@ -8,11 +8,29 @@ namespace Tools
 	Vector<std::string> split(std::string strline, char delim);
 	time_t strToTime(std::string strTime);
 	std::string timeToString(time_t time);
+
+	template <class T>
+	void selectionSort(Vector<T>& vec, bool (*cmp_func)(T&, T&))
+	{
+		for (int i = 0; i < vec.count(); i++)
+		{
+			int min_index = i;
+
+			for (int j = i + 1; j < vec.count(); j++)
+			{
+				if (cmp_func(vec[j], vec[min_index]))
+					min_index = j;
+			}
+
+			T data = vec[i];
+			vec[i] = vec[min_index];
+			vec[min_index] = data;
+		}
+	}
 }
 
 namespace Hash
 {
-
 	int charvalue(char c);
 
 	template<int HashSize>

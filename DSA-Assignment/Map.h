@@ -17,7 +17,9 @@ protected:
 		K key;
 		Node* next;
 
-		V& getValue() { return value; }
+		Node() :
+			next(NULL)
+		{ }
 
 		Node(K key) :
 			next(NULL),
@@ -92,31 +94,21 @@ protected:
 		}
 	}
 
-	Node* push(K key, V item)
+	Node* push(K key)
 	{
 		int hashIndex = Hash::hash<HASH_SIZE>(key);
-		Node* pItem;
 
-		if (!items[hashIndex])
-		{
-			items[hashIndex] = new Node(key);
-			items[hashIndex]->value = std::move(item);
-			pItem = items[hashIndex];
-		}
-		else
+		if (items[hashIndex])
 		{
 			Node* temp = items[hashIndex];
 			while (temp->next)
 				temp = temp->next;
-
 			temp->next = new Node(key);
-			temp->next->value = std::move(item);
-			pItem = temp;
+			return temp;
 		}
-
-		return pItem;
+		items[hashIndex] = new Node(key);
+		return items[hashIndex];
 	}
-
 
 	void pop(K key, V& item)
 	{
@@ -177,11 +169,11 @@ public:
 		return false;
 	}
 
-	bool exists(K key)
+	bool exists(K& key)
 	{
 		int hashIndex = Hash::hash<HASH_SIZE>(key);
 
-		if (!items[hashIndex])
+		if (items[hashIndex])
 		{
 			if (items[hashIndex]->key == key)
 			{
@@ -199,6 +191,7 @@ public:
 					temp = temp->next;
 				}
 			}
+			return false;
 		}
 		return false;
 	}

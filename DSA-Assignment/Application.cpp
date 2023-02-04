@@ -67,8 +67,7 @@ int Application::Run()
 
 		//prompt for user input to log out or see topics
 		cin >> choice;
-		cout << clrsr;
-
+		
 		if (isLoggedIn)
 			handleMainMenu(choice);
 		else
@@ -91,7 +90,7 @@ void Application::printLoginMenu()
 //function to print the main menu (logged in)
 void Application::printMainMenu()
 {
-	cout << fgyellow << "Logged in as " << acc->getUsername() << grdefault << endl;
+	cout << fgyellow << "Logged in as " << acc->username << grdefault << endl;
 
 	cout << R"(_________________________________________________________
 _________________________________________________________
@@ -120,7 +119,7 @@ bool Application::handleLoginMenu(int choice)
 	switch (choice)
 	{
 	case 1:
-		cout << fgmagenta << "Goodbye!" << grdefault << endl;
+		cout << clrsr << fgmagenta << "Goodbye!" << grdefault << endl;
 		return false;
 
 	case 2:
@@ -149,6 +148,7 @@ void Application::handleMainMenu(int choice)
 		//if user chooses to log out
 	case 1:
 		isLoggedIn = false;
+		cout << clrsr;
 		break;
 	
 		//if user chooses to view all topics in the forum
@@ -172,6 +172,7 @@ void Application::handleMainMenu(int choice)
 
 bool Application::promptForLoginUser()
 {
+	cout << clrsr;
 	string username, password;
 
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -196,6 +197,7 @@ bool Application::promptForLoginUser()
 
 bool Application::promptForRegisterUser()
 {
+	cout << clrsr;
 	string username, password;
 
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -241,6 +243,7 @@ bool Application::promptForRegisterUser()
 
 bool Application::handleChangePassword()
 {
+	cout << clrsr;
 	string oldPassword, newPassword;
 
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -266,8 +269,9 @@ bool Application::handleChangePassword()
 			cout << delline << set_prev_n_line_vts(1) << delline;
 		}
 
-		std::string accname = acc->getUsername();
-		acc->changePassword(newPassword);
+		std::string accname = acc->username;
+		accDA.removeObject(*acc);
+		acc = accDA.addObject(Account(accname, newPassword));
 
 		cout << clrsr << fggreen << "Password changed successfully!" << endl;
 		Sleep(SLP_UI_DELAY);
@@ -287,11 +291,11 @@ void Application::handleViewTopics()
 {
 	std::string choice;
 	cout << clrsr;
-	Vector<string> topicNames = topicDA.getTopics();
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 	while (true)
 	{
+		Vector<string> topicNames = topicDA.getTopics();
 		printViewTopicsMenu(topicNames);
 
 		getline(cin, choice);
@@ -334,12 +338,10 @@ bool Application::handleViewTopicsMenu(Vector<string>& topicNames, string choice
 	else if (choice == "T")
 	{
 		topicDA.sortByLatest();
-		topicNames = topicDA.getTopics();
 	}
 	else if (choice == "A")
 	{
 		topicDA.sortByAlphabet();
-		topicNames = topicDA.getTopics();
 	}
 	else
 	{
@@ -369,8 +371,7 @@ void Application::promptNewTopic(Vector<string>& topicNames)
 
 	if (!topicDA.findTopic(topictitle))
 	{
-		topicDA.addObject(Topic(topictitle, topicdesc, acc->getUsername()));
-		topicNames.push(topictitle);
+		topicNames.push(topicDA.addObject(Topic(topictitle, topicdesc, acc->username))->getTitle());
 	}
 	else
 	{
@@ -443,7 +444,7 @@ bool Application::handleViewTopicMenu(Topic& topic, string choice)
 		{
 			cout << fgred << "Invalid Input! Please try again!" << grdefault;
 			Sleep(SLP_UI_DELAY);
-			cout << restore;
+			cout << restore << clrsr;
 		}
 	}
 
@@ -458,7 +459,7 @@ void Application::promptNewPost(Topic& topic)
 	getline(cin, postText);
 	cout << clrsr;
 
-	topic.addNewPost(Post(postText, acc->getUsername()));
+	topic.addNewPost(Post(postText, acc->username));
 }
 
 void Application::handleViewPost(Post& post, std::string username)

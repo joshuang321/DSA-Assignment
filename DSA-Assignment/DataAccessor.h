@@ -41,6 +41,6 @@ protected:
 	}
 
 public:
-	T* addObject(T obj) { return cacheData.push(std::move(obj)); }
+	T* addObject(T&& obj) { return cacheData.push(std::move(obj)); }
 	void removeObject(T& obj) { cacheData.pop(obj); }
 };
