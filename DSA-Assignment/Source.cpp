@@ -15,7 +15,7 @@ using namespace std;
 int main(void)
 {
 	Application app;
-
+		
 	/* Sets up virtual terminal processing for the console output */
 	if (!GetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE),
 		&dwOldConsoleMode))

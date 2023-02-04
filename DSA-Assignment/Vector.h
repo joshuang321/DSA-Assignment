@@ -12,6 +12,37 @@ class Vector
 	int nElementCount;
 
 public:
+	struct Iterator
+	{
+		using iterator_category = std::forward_iterator_tag;
+		using difference_type = std::ptrdiff_t;
+		using value_type = T;
+		using pointer = T*;
+		using reference = T&;
+
+	private:
+		pointer ptr;
+	
+	public:
+		Iterator(pointer ptr) : ptr(ptr) {}
+
+		reference operator*() const { return *ptr; }
+		pointer operator->() { return ptr; }
+		Iterator& operator++() { ptr++; return *this; }
+		Iterator operator++(int) { Iterator tmp = *this; ++(*this); return tmp; }
+		friend bool operator== (const Iterator& a, const Iterator& b) { return a.ptr == b.ptr; };
+		friend bool operator!= (const Iterator& a, const Iterator& b) { return a.ptr != b.ptr; };
+	};
+
+	Iterator begin()
+	{
+		if (ptr)
+			return Iterator(&ptr[0]);
+		else
+			return end();
+	}
+
+	Iterator end() { return Iterator(&ptr[nElementCount]); }
 
 	Vector() : maxElements(4), nElementCount(0)
 	{

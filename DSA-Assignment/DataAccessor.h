@@ -4,15 +4,15 @@
 #include <fstream>
 #include <string>
 
-template <class T>
+template <class T, class D=Vector<T>>
 class DataAccessor
 {
 	const char* filename;
 
 protected:
-	Vector<T> cacheData;
+	D cacheData;
 
-	DataAccessor<T>(const char* filename) : filename(filename), cacheData()
+	DataAccessor(const char* filename) : filename(filename), cacheData()
 	{
 		std::ifstream ifDataFile(filename, std::ifstream::in);
 		std::string strline;
@@ -21,15 +21,23 @@ protected:
 			cacheData.push(T(strline));
 	}
 
-	~DataAccessor<T>()
+	~DataAccessor()
 	{
 		std::ofstream ofDataFile(filename);
 
-		if (cacheData.count() != 0)
-			ofDataFile << cacheData[0];
+		D::template Iterator it = cacheData.begin(),
+			endIt = cacheData.end();
 
-		for (int i = 1; i < cacheData.count(); i++)
-			ofDataFile << '\n' << cacheData[i];
+		if (it != endIt)
+		{
+			ofDataFile << *it;
+			it++;
+
+			for (auto It = it;
+				It != endIt;
+				It++)
+				ofDataFile << '\n' << *It;
+		}
 	}
 
 public:

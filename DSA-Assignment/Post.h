@@ -1,16 +1,12 @@
 #pragma once
 #include <iostream>
 #include <ctime>
-#include "Account.h"
+#include "Comment.h"
 
 //
-class Post {
+class Post : public Comment {
 	//attributes
 private:
-	std::string text;
-	time_t timeCreated;
-	std::string username;
-	int likes;
 
 public:
 	std::string reply;
@@ -22,13 +18,6 @@ public:
 	
 	Post(std::string text, std::string username);
 	Post(std::string strline);
-
-
-	std::string getText();
-	std::string getTimeCreated();
-	std::string getUsername();
-	int getLikes();
-	void addLike();
 
 	friend std::ostream & operator << (std::ostream & os, Post & post);
 	bool operator==(Post& acc);

@@ -12,14 +12,12 @@ using namespace std;
 
 static const char* PostSaveFileName = "Posts.txt";
 
-Post::Post() : text(), timeCreated(), username(), reply(), likes() {}
+Post::Post() : Comment(), reply()
+{ }
 
 Post::Post(const Post& post) :
-	text(post.text),
-	timeCreated(post.timeCreated),
-	username(post.username),
-	reply(post.reply),
-	likes(post.likes)
+	Comment(post),
+	reply(post.reply)
 {
 #if defined (_DEBUG)
 	OutputDebugStringA("Post_CC\n");
@@ -27,83 +25,29 @@ Post::Post(const Post& post) :
 }
 
 Post::Post(Post&& post) :
-	text(std::move(post.text)),
-	timeCreated(std::move(post.timeCreated)),
-	username(std::move(post.username)),
-	reply(std::move(post.reply)),
-	likes(std::move(post.likes))
+	Comment(std::move(post)),
+	reply(std::move(post.reply))
 {
 #if defined (_DEBUG)
 	OutputDebugStringA("Post_MC\n");
 #endif
 }
 
-Post::Post(string text, string username) :
-	text(text),
-	timeCreated(chrono::system_clock::to_time_t(chrono::system_clock::now())),
-	username(username),
-	reply(reply),
-	likes(0)
+Post::Post(string title, string username) :
+	Comment(title, username),
+	reply()
 { }
 
-Post::Post(string strline)
+Post::Post(string strline) : Comment(strline.substr(0, strline.find_last_of(';')))
 {
-	size_t ndelim;
-	std::string strtimeCreated;
-	tm _tm;
-
-	//replaces .split() function
-	ndelim = strline.find(';');
-	text = strline.substr(0, ndelim);
-	strline = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
-
-	ndelim = strline.find(';');
-	strtimeCreated = strline.substr(0, ndelim);
-	strline = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
-
-	ndelim = strline.find(';');
-	username = strline.substr(0, ndelim);
-	strline = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
-
-	ndelim = strline.find(';');
-	likes = atoi(strline.substr(0, ndelim).c_str());
-	strline = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
-
-	reply = strline;
-		
-
-	std::istringstream(strtimeCreated.c_str()) >> std::get_time(&_tm, "%Y-%m-%d %H:%M:%S");
-	timeCreated = std::mktime(&_tm);
+	size_t ndelim = strline.find_last_of(';');
+	reply = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
 }
-
-string Post::getText() { return text; }
-
-string Post::getTimeCreated()
-{
-	char strBuf[256];
-	size_t szCount;
-	tm _tm;
-
-	localtime_s(&_tm, &timeCreated);
-	szCount = strftime(strBuf, 256, "%Y-%m-%d %H:%M:%S", &_tm);
-
-	return std::string(strBuf, szCount);
-}
-
-string Post::getUsername() { return username; }
-
-int Post::getLikes() { return likes; }
-
-void Post::addLike() { likes++; }
 
 std::ostream& operator<<(std::ostream& os, Post& post)
 {
-	os << post.text << ';' << post.getTimeCreated() << ';' << post.username << ';' << post.likes << 
-		';' << post.reply;
+	os << ((Comment&)post) << ';' << post.reply;
 	return os;
 }
 
-bool Post::operator==(Post& post)
-{
-	return post.text == text;
-}
+bool Post::operator==(Post& post) { return Comment::operator==(post); }

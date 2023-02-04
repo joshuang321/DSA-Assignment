@@ -391,7 +391,7 @@ void Application::printViewTopicMenu(Topic& topic)
 
 	for (int i = 0; i < topic.posts.count(); i++)
 	{
-		cout << endl << fgyellow << '[' << i + 1 << "] " << grunderline << topic.posts[i].getText() <<  grdefault << endl
+		cout << endl << fgyellow << '[' << i + 1 << "] " << grunderline << topic.posts[i].getTitle() <<  grdefault << endl
 			<< "Posted by " << topic.posts[i].getUsername() << endl
 			<< "Posted at " << topic.posts[i].getTimeCreated() << endl
 			<< topic.posts[i].getLikes() << " Likes" << endl << endl;
@@ -463,7 +463,7 @@ void Application::printViewPostMenu(Post& post)
 	cout << "[" << fgred << "E" << grdefault << "] Go Back to Main Menu" << endl
 		<< "[" << fgblue << "L" << grdefault << "] Like Post" << endl
 		<< "[" << fggreen << "R" << grdefault << "] Create a new Reply" << endl << endl
-		<< fgyellow << grunderline << post.getText() << grdefault <<  endl
+		<< fgyellow << grunderline << post.getTitle() << grdefault <<  endl
 		<< "Posted at: " << post.getTimeCreated() << endl
 		<< "Posted by: " << post.getUsername() << endl
 		<< post.getLikes() << " Likes" << endl << endl

@@ -2,8 +2,9 @@
 
 #include "DataAccessor.h"
 #include "Account.h"
+#include "AccountMapAdapter.h"
 
-class AccountDA : public DataAccessor<Account>
+class AccountDA : public DataAccessor<Account, AccountMapAdapter>
 {	
 public:
 	AccountDA();

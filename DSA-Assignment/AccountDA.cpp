@@ -3,29 +3,19 @@
 
 static const char* AccSaveFilename = "Accounts.txt";
 
-AccountDA::AccountDA() : DataAccessor<Account>(AccSaveFilename)
+AccountDA::AccountDA() : DataAccessor<Account, AccountMapAdapter>(AccSaveFilename)
 { }
 
 bool AccountDA::findUser(Account*& pAcc, std::string username, std::string password)
 {
-	for (int i = 0; i < cacheData.count(); i++)
+	if (cacheData.get(username, pAcc))
 	{
-		if (username == cacheData[i].getUsername() &&
-			cacheData[i].isCorrect(password))
-		{
-			pAcc = &cacheData[i];
-			return true;
-		}
+		return (pAcc->isCorrect(password));
 	}
 	return false;
 }
 
 bool AccountDA::findUser(std::string username)
 {
-	for (int i = 0; i < cacheData.count(); i++)
-	{
-		if (username == cacheData[i].getUsername())
-			return true;
-	}
-	return false;
+	return cacheData.exists(username);
 }

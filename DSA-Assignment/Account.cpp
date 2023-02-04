@@ -31,12 +31,12 @@ Account::Account(Account&& acc) :
 
 Account::Account(std::string strline)
 {
-	int ndelim = strline.find(';');
+	size_t ndelim = strline.find(';');
 	password = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
 	username = strline.substr(0, ndelim);
 }
 
-std::string Account::getUsername() { return username; }
+const std::string& Account::getUsername() { return username; }
 
 bool Account::isCorrect(std::string password) { return password == this->password; }
 

@@ -5,15 +5,13 @@
 
 #include "Vector.h"
 #include "Post.h"
+#include "Comment.h"
 
-class Topic {
+class Topic : public Comment
+{
 	//attributes
 private:
-	std::string title;
 	std::string description;
-	std::string username;
-	std::time_t timeCreated;
-	int likes;
 
 public:
 	Vector<Post> posts;
@@ -27,13 +25,7 @@ public:
 	Topic(std::string strline);
 
 	void addNewPost(Post newPost);
-
-	std::string getTitle();
 	std::string getDescription();
-	std::string getUsername();
-	std::string getTimeCreated();
-	int getLikes();
-	void addLike();
 
 	friend std::ostream& operator<<(std::ostream& os, Topic& topic);
 	bool operator==(Topic& acc);

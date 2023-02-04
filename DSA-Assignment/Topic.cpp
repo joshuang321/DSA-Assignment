@@ -9,14 +9,11 @@
 
 static const char* TopicSaveFilename = "Topics.txt";
 
-Topic::Topic() : title(), description(), username(), timeCreated(), likes(), posts() { }
+Topic::Topic() : Comment(), description(), posts() { }
 
 Topic::Topic(const Topic& topic) :
-	title(topic.title),
+	Comment(topic),
 	description(topic.description),
-	username(topic.username),
-	timeCreated(topic.timeCreated),
-	likes(topic.likes),
 	posts(topic.posts)
 {
 #if defined (_DEBUG)
@@ -25,11 +22,8 @@ Topic::Topic(const Topic& topic) :
 }
 
 Topic::Topic(Topic&& topic) :
-	title(std::move(topic.title)),
+	Comment(std::move(topic)),
 	description(std::move(topic.description)),
-	username(std::move(topic.username)),
-	timeCreated(std::move(topic.timeCreated)),
-	likes(std::move(topic.likes)),
 	posts(std::move(topic.posts))
 {
 #if defined(_DEBUG)
@@ -37,77 +31,29 @@ Topic::Topic(Topic&& topic) :
 #endif
 }
 
-
 Topic::Topic(std::string title, std::string description, std::string username) :
-	title(title),
+	Comment(title, username),
 	description(description),
-	username(username),
-	timeCreated(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())),
-	likes(0),
 	posts()
 { }
 
-Topic::Topic(std::string strline)
+Topic::Topic(std::string strline) : Comment(strline.substr(0, strline.find_last_of(';')))
 {
-	size_t ndelim;
-	std::string strtimeCreated = strline;
-	tm _tm;
-
-	//replaces .split() function
-	ndelim = strline.find(';');
-	title = strline.substr(0, ndelim);
-	strline = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
-
-	ndelim = strline.find(';');
-	description = strline.substr(0, ndelim);
-	strline = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
-
-	ndelim = strline.find(';');
-	username = strline.substr(0, ndelim);
-	strline = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
-
-	ndelim = strline.find(';');
-	strtimeCreated = strline;
-	strline = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
-
-	likes = atoi(strline.c_str());
-
-	std::istringstream(strtimeCreated.c_str()) >> std::get_time(&_tm, "%Y-%m-%d %H:%M:%S");
-	timeCreated = std::mktime(&_tm);
+	size_t ndelim = strline.find_last_of(';');
+	description = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
 }
 
 void Topic::addNewPost(Post newPost) { posts.push(std::move(newPost)); }
 
-std::string Topic::getTitle() { return title; }
-
 std::string Topic::getDescription() { return description; }
-
-std::string Topic::getUsername() { return username; }
-
-std::string Topic::getTimeCreated() 
-{
-	char strBuf[256];
-	std::size_t szCount;
-	tm _tm;
-
-	localtime_s(&_tm, &timeCreated);
-	szCount = strftime(strBuf, 256, "%Y-%m-%d %H:%M:%S", &_tm);
-	
-	return std::string(strBuf, szCount);
-}
-
-int Topic::getLikes() { return likes; }
-
-void Topic::addLike() { likes++; }
 
 std::ostream& operator<<(std::ostream& os, Topic& topic)
 {
-	os << topic.title << ';' << topic.description << ';' << topic.username
-		<< ';' << topic.getTimeCreated() << ';' << topic.likes;
+	os << ((Comment&)topic) << ';' << topic.description;
 	return os;
 }
 
 bool Topic::operator==(Topic& topic)
 {
-	return topic.title == title;
+	return Comment::operator==(topic);
 }

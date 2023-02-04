@@ -17,7 +17,7 @@ public:
 	Account(std::string username, std::string password);
 	Account& operator=(const Account&) = default;
 
-	std::string getUsername();
+	const std::string& getUsername();
 	bool isCorrect(std::string password);
 
 	friend std::ostream& operator<<(std::ostream& os, Account& acc);
