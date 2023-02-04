@@ -35,7 +35,7 @@ public:
 
 	void handleViewTopics();
 	void printViewTopicsMenu(Vector<std::string>& topicNames);
-	bool handleViewTopicsMenu(Vector<std::string>& topicNames, TopicDA topicDA, std::string choice);
+	bool handleViewTopicsMenu(Vector<std::string>& topicNames, std::string choice);
 	void promptNewTopic(Vector<std::string>& topicNames);
 
 	void handleViewTopic(int nIndex);

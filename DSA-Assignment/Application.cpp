@@ -295,7 +295,7 @@ void Application::handleViewTopics()
 		printViewTopicsMenu(topicNames);
 
 		getline(cin, choice);
-		if (!handleViewTopicsMenu(topicNames, topicDA, choice))
+		if (!handleViewTopicsMenu(topicNames, choice))
 			break;
 	}
 }
