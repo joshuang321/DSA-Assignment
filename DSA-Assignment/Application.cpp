@@ -320,7 +320,7 @@ void Application::printViewTopicsMenu(Vector<string>& topicNames)
 	cout << restore;
 }
 
-bool Application::handleViewTopicsMenu(Vector<string>& topicNames, TopicDA topicDA, string choice)
+bool Application::handleViewTopicsMenu(Vector<string>& topicNames, string choice)
 {
 	int nIndex;
 
