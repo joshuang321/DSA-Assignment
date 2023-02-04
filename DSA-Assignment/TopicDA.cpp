@@ -51,3 +51,31 @@ bool TopicDA::findTopic(std::string topicName)
 			return true;
 	return false;
 }
+
+void TopicDA::sortByLatest()
+{
+	int arraySize = cacheData.count();
+
+	//use selection sort to sort by time
+	for (int i = 0; i < arraySize; i++)
+	{
+		int min_index = i;
+
+		for (int j = i + 1; j < arraySize; j++)
+		{
+			if (cacheData[j].getTimeCreated() < cacheData[min_index].getTimeCreated())
+			{
+				min_index = j;
+			}
+		}
+
+		Topic temp = cacheData[i];
+		cacheData[i] = cacheData[min_index];
+		cacheData[min_index] = temp;
+	}
+}
+
+void TopicDA::sortByAlphabet()
+{
+
+}

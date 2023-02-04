@@ -253,8 +253,18 @@ bool Application::handleChangePassword()
 
 	if (oldMatch)
 	{
-		cout << "Enter new password: ";
-		getline(cin, newPassword);
+		while (true)
+		{
+			cout << "Enter new password: ";
+			getline(cin, newPassword);
+
+			if (newPassword.length() > 0)
+				break;
+
+			cout << fgred << "Password cannot be empty!" << grdefault;
+			Sleep(SLP_UI_DELAY);
+			cout << delline << set_prev_n_line_vts(1) << delline;
+		}
 
 		std::string accname = acc->getUsername();
 		accDA.removeObject(*acc);
@@ -295,18 +305,19 @@ void Application::handleViewTopics()
 void Application::printViewTopicsMenu(Vector<string>& topicNames)
 {
 	cout << "[" << fgred << "E" << grdefault << "] Go Back to Main Menu" << endl
-		<< "[" << fggreen << "C" << grdefault << "] Create a new Topic" << endl << endl
+		<< "[" << fggreen << "C" << grdefault << "] Create a new Topic" << endl 
+		<< "[" << fgblue << "T" << grdefault << "] Sort Topics by Time" << endl
+		<< "[" << fgblue << "A" << grdefault << "] Sort Topics by Alphabet" << endl << endl
 		<< fgmagenta << "Your Choice? " << grdefault << save;
 
 	cout << go_down_vts(3) << set_x_pos_vts(0)
 		<< fgcyan << "Topics:" << grdefault << endl;
 
-	for (int i = 0;
-		i < topicNames.count();
-		i++)
+	for (int i = 0; i < topicNames.count(); i++)
 	{
 		cout << fgyellow << '[' << i + 1 << "] " << grunderline << topicNames[i] << grdefault << endl;
 	}
+
 	cout << restore;
 }
 
@@ -319,8 +330,12 @@ bool Application::handleViewTopicsMenu(Vector<string>& topicNames, string choice
 		cout << clrsr;
 		return false;
 	}
-	if (choice == "C")
+	else if (choice == "C")
 		promptNewTopic(topicNames);
+	else if (choice == "T")
+		handleViewTopics();
+	else if (choice == "A")
+		handleViewTopics();
 	else
 	{
 		nIndex = atoi(choice.c_str());

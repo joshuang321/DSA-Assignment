@@ -13,4 +13,6 @@ public:
 	Vector<std::string> getTopics();
 	Topic& getTopic(int nIndex);
 	bool findTopic(std::string topicName);
+	void sortByLatest();
+	void sortByAlphabet();
 };
