@@ -13,4 +13,7 @@ public:
 	Vector<std::string> getTopics();
 	Topic& getTopic(int nIndex);
 	bool findTopic(std::string topicName);
+	void sortByLatest();
+	int hash(std::string topicName);
+	void sortByAlphabet();
 };

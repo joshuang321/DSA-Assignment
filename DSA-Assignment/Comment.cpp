@@ -52,6 +52,11 @@ int Comment::getLikes() { return likes; }
 
 void Comment::addLike() { likes++; }
 
+bool Comment::isLaterThan(Comment& comment)
+{
+	return timeCreated < comment.timeCreated;
+}
+
 std::ostream& operator << (std::ostream& os, Comment& comment)
 {
 	os << comment.title << ';' << comment.getTimeCreated() << ';' << comment.username
