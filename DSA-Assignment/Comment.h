@@ -26,6 +26,8 @@ public:
 	int getLikes();
 	void addLike();
 
+	bool isLaterThan(Comment& comment);
+
 	friend std::ostream& operator << (std::ostream& os, Comment& comment);
 	bool operator==(Comment& comment);
 };

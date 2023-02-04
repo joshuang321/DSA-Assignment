@@ -52,20 +52,20 @@ bool TopicDA::findTopic(std::string topicName)
 	return false;
 }
 
+//use selection sort to sort topics by time created
 void TopicDA::sortByLatest()
 {
-	int arraySize = cacheData.count();
-
-	//use selection sort to sort by time
-	for (int i = 0; i < arraySize; i++)
+	for (int i = 0; i < cacheData.count(); i++)
 	{
 		int min_index = i;
 
-		for (int j = i + 1; j < arraySize; j++)
+		for (int j = i + 1; j < cacheData.count(); j++)
 		{
-			if (cacheData[j].getTimeCreated() < cacheData[min_index].getTimeCreated())
+			if (cacheData[j].isLaterThan(cacheData[min_index]))
 			{
 				min_index = j;
+
+				break;
 			}
 		}
 
@@ -75,7 +75,56 @@ void TopicDA::sortByLatest()
 	}
 }
 
+//helper function to get corresponding integer for a character
+int charvalue(char c)
+{
+	if (isalpha(c))
+	{
+		if (isupper(c))
+			return (int)c - (int)'A';
+		else
+			return (int)c - (int)'a' + 26;
+	}
+	else
+		return -1;
+}
+
+//hashes the topic name from string to integer value
+int TopicDA::hash(std::string topicName)
+{
+	int code = 0;
+
+	//convert key string to int hash code
+	for (int i = 0; i < topicName.length(); i++)
+	{
+		code += charvalue(topicName[i]);
+	}
+
+	return code;
+}
+
+//use selection sort to sort topics by alphabet
 void TopicDA::sortByAlphabet()
 {
+	for (int i = 0; i < cacheData.count(); i++)
+	{
+		int min_index = i;
 
+		for (int j = i + 1; j < cacheData.count(); j++)
+		{
+			/*std::string codemin_indextitle = cacheData[min_index].getTitle();
+			std::string jtitle = cacheData[j].getTitle();*/
+			int titleCodemin_index = hash(cacheData[min_index].getTitle());
+			int titleCodej = hash(cacheData[j].getTitle());
+
+			if (titleCodej < titleCodemin_index)
+			{
+				min_index = j;
+			}
+		}
+
+		Topic temp = cacheData[i];
+		cacheData[i] = cacheData[min_index];
+		cacheData[min_index] = temp;
+	}
 }

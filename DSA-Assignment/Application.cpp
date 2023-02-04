@@ -296,7 +296,7 @@ void Application::handleViewTopics()
 		printViewTopicsMenu(topicNames);
 
 		getline(cin, choice);
-		if (!handleViewTopicsMenu(topicNames, choice))
+		if (!handleViewTopicsMenu(topicNames, topicDA, choice))
 			break;
 	}
 }
@@ -321,7 +321,7 @@ void Application::printViewTopicsMenu(Vector<string>& topicNames)
 	cout << restore;
 }
 
-bool Application::handleViewTopicsMenu(Vector<string>& topicNames, string choice)
+bool Application::handleViewTopicsMenu(Vector<string>& topicNames, TopicDA topicDA, string choice)
 {
 	int nIndex;
 
@@ -330,12 +330,18 @@ bool Application::handleViewTopicsMenu(Vector<string>& topicNames, string choice
 		cout << clrsr;
 		return false;
 	}
-	else if (choice == "C")
+	if (choice == "C")
 		promptNewTopic(topicNames);
 	else if (choice == "T")
-		handleViewTopics();
+	{
+		topicDA.sortByLatest();
+		topicNames = topicDA.getTopics();
+	}
 	else if (choice == "A")
-		handleViewTopics();
+	{
+		topicDA.sortByAlphabet();
+		topicNames = topicDA.getTopics();
+	}
 	else
 	{
 		nIndex = atoi(choice.c_str());
