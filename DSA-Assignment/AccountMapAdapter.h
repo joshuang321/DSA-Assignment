@@ -21,7 +21,12 @@ public:
 		Map(std::move(adapter))
 	{ }
 
-	Account* push(Account acc) { return Map::push((std::string&) acc.getUsername(), acc); }
+	Account* push(Account acc)
+	{
+		Node* pNode = Map::push((std::string&) acc.getUsername(), acc);
+		pNode->key = pNode->getValue().getUsername();
+		return &(pNode->value);
+	}
 
 	void pop(Account& acc) { Map::pop((std::string&)acc.getUsername(), acc); }
 };

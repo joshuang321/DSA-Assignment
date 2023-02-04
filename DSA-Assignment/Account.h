@@ -19,6 +19,7 @@ public:
 
 	const std::string& getUsername();
 	bool isCorrect(std::string password);
+	void changePassword(std::string password);
 
 	friend std::ostream& operator<<(std::ostream& os, Account& acc);
 	bool operator==(Account& acc);

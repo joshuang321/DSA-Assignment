@@ -8,11 +8,16 @@ const int  HASH_SIZE = 37;
 template<class K, class V>
 class Map
 {
+
+
+protected:
 	struct Node
 	{
-		K key;
 		V value;
+		K key;
 		Node* next;
+
+		V& getValue() { return value; }
 
 		Node(K key) :
 			next(NULL),
@@ -25,10 +30,10 @@ class Map
 			next(NULL)
 		{ }
 	};
+private:
 	Node* items[HASH_SIZE];
 
 protected:
-
 	Map()
 	{
 		for (int i = 0; i < HASH_SIZE; i++)
@@ -87,16 +92,16 @@ protected:
 		}
 	}
 
-	V* push(K key, V item)
+	Node* push(K key, V item)
 	{
 		int hashIndex = Hash::hash<HASH_SIZE>(key);
-		V* pItem;
+		Node* pItem;
 
 		if (!items[hashIndex])
 		{
 			items[hashIndex] = new Node(key);
 			items[hashIndex]->value = std::move(item);
-			pItem = &(items[hashIndex]->value);
+			pItem = items[hashIndex];
 		}
 		else
 		{
@@ -106,7 +111,7 @@ protected:
 
 			temp->next = new Node(key);
 			temp->next->value = std::move(item);
-			pItem = &temp->value;
+			pItem = temp;
 		}
 
 		return pItem;
@@ -117,7 +122,7 @@ protected:
 	{
 		int hashIndex = Hash::hash<HASH_SIZE>(key);
 		
-		if (!items[hashIndex])
+		if (items[hashIndex])
 		{
 			if (items[hashIndex]->value == item)
 			{

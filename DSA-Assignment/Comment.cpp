@@ -42,7 +42,6 @@ Comment::Comment(std::string title, std::string username) :
 	likes(0)
 { }
 
-
 std::string Comment::getTitle() { return title; }
 
 std::string Comment::getTimeCreated() { return Tools::timeToString(timeCreated); }
@@ -52,10 +51,6 @@ std::string Comment::getUsername() { return username; }
 int Comment::getLikes() { return likes; }
 
 void Comment::addLike() { likes++; }
-
-void Comment::renderContent(std::ostream& os)
-{
-}
 
 std::ostream& operator << (std::ostream& os, Comment& comment)
 {

@@ -257,8 +257,7 @@ bool Application::handleChangePassword()
 		getline(cin, newPassword);
 
 		std::string accname = acc->getUsername();
-		accDA.removeObject(*acc);
-		acc = accDA.addObject(Account(accname, newPassword));
+		acc->changePassword(newPassword);
 
 		cout << clrsr << fggreen << "Password changed successfully!" << endl;
 		Sleep(SLP_UI_DELAY);

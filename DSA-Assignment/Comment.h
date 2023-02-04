@@ -17,8 +17,6 @@ protected:
 
 	Comment(std::string strline);
 	Comment(std::string title, std::string username);
-
-	virtual void renderContent(std::ostream& os);
 public:
 	std::string getTitle();
 	std::string getTimeCreated();
