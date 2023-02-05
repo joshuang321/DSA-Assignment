@@ -44,9 +44,11 @@ public:
 	bool handleViewTopicMenu(Topic& topic, std::string choice);
 	void promptNewPost(Topic& topic);
 
-	void handleViewPost(Post& post, std::string username);
+	void handleViewPost(Topic& topic, Post& post, std::string username);
 	void printViewPostMenu(Post& post);
-	bool handleViewPostMenu(Post& post, std::string username, std::string choice);
+	bool handleViewPostMenu(Topic& topic, Post& post, std::string username, std::string choice);
 	void promptNewReply(Post& post);
+	bool handleEditPost(Topic& topic, Post& post);
+	bool handleDeletePost(Topic& topic, Post& post);
 };
 

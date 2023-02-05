@@ -75,34 +75,6 @@ void TopicDA::sortByLatest()
 	}
 }
 
-//helper function to get corresponding integer for a character
-int charvalue(char c)
-{
-	if (isalpha(c))
-	{
-		if (isupper(c))
-			return (int)c - (int)'A';
-		else
-			return (int)c - (int)'a' + 26;
-	}
-	else
-		return -1;
-}
-
-//hashes the topic name from string to integer value
-int TopicDA::hash(std::string topicName)
-{
-	int code = 0;
-
-	//convert key string to int hash code
-	for (int i = 0; i < topicName.length(); i++)
-	{
-		code += charvalue(topicName[i]);
-	}
-
-	return code;
-}
-
 //use selection sort to sort topics by alphabet
 void TopicDA::sortByAlphabet()
 {
@@ -112,12 +84,7 @@ void TopicDA::sortByAlphabet()
 
 		for (int j = i + 1; j < cacheData.count(); j++)
 		{
-			/*std::string codemin_indextitle = cacheData[min_index].getTitle();
-			std::string jtitle = cacheData[j].getTitle();*/
-			int titleCodemin_index = hash(cacheData[min_index].getTitle());
-			int titleCodej = hash(cacheData[j].getTitle());
-
-			if (titleCodej < titleCodemin_index)
+			if (cacheData[j].getTitle() < cacheData[min_index].getTitle())
 			{
 				min_index = j;
 			}
