@@ -214,6 +214,15 @@ bool Application::promptForLoginUser()
 	cout << "Password: ";
 	getline(cin, password);
 
+	//check if username is empty
+	if (username.length() == 0)
+	{
+		cout << clrsr << fgred << "Username cannot be empty!" << endl;
+		Sleep(SLP_UI_DELAY);
+		cout << clrsr;
+		return false;
+	}
+
 	//check if the user exists in the Account data file
 	if (accDA.findUser(acc, username, password))
 	{
@@ -445,6 +454,15 @@ void Application::promptNewTopic(Vector<string>& topicNames)
 	getline(cin, topictitle);
 	cout << "Topic Description: ";
 	getline(cin, topicdesc);
+
+	//check if topic title is empty
+	if (topictitle.length() == 0 || topicdesc.length() == 0)
+	{
+		cout << fgred << "Topic title and description cannot be empty!" << grdefault << endl;
+		Sleep(SLP_UI_DELAY);
+
+		return;
+	}
 
 	//check if topic title already exists
 	if (!topicDA.findTopic(topictitle))
