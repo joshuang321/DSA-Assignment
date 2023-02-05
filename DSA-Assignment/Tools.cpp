@@ -17,6 +17,9 @@ namespace Tools
 	{
 		Vector<std::string> strs;
 		size_t ndelim = strline.find(delim);
+
+		/* iterate through the line in the dataand split the substring beforeand
+		after the delimiter and assign back the remaining string */
 		while (ndelim != strline.npos)
 		{
 			strs.push(strline.substr(0, ndelim));
@@ -29,6 +32,8 @@ namespace Tools
 	time_t strToTime(std::string strTime)
 	{
 		tm _tm;
+
+		/* Creates a string stream and insert it and format it into get_time */
 		std::istringstream(strTime.c_str()) >> std::get_time(&_tm, "%Y-%m-%d %H:%M:%S");
 		return std::mktime(&_tm);
 	}
@@ -39,9 +44,11 @@ namespace Tools
 		std::size_t szCount;
 		tm _tm;
 
+		/* Allocates small buffer of under stack and uses string ftime and put it in the buffer */
 		localtime_s(&_tm, &time);
 		szCount = strftime(strBuf, 256, "%Y-%m-%d %H:%M:%S", &_tm);
 
+		/* Use the buffer and count of characters to create a string */
 		return std::string(strBuf, szCount);
 	}
 }
@@ -52,6 +59,7 @@ namespace Hash
 	{
 		if (isalpha(c))
 		{
+			/* Maps the capital and lower letters to the respective index in the alphabet*/
 			if (isupper(c))
 				return (int)c - (int)'A';
 			else
