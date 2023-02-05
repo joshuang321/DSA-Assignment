@@ -51,7 +51,21 @@ static std::string set_prev_n_line_vts(int nLine)
 	return "\x1b[" + std::to_string(nLine) + "F";
 }
 
-Application::Application() : isLoggedIn(false) { }
+Application::Application() : isLoggedIn(false), acc(NULL)
+{
+	std::string strline;
+	std::ifstream ifConfigFile("AccountConfig.txt", std::ifstream::in);
+
+	std::getline(ifConfigFile, strline);
+	sortState = atoi(strline.c_str());
+}
+
+Application::~Application()
+{
+	std::ofstream ofConfigFile("AccountConfig.txt");
+
+	ofConfigFile << sortState;
+}
 
 int Application::Run()
 {
@@ -309,8 +323,18 @@ void Application::printViewTopicsMenu(Vector<string>& topicNames)
 {
 	cout << "[" << fgred << "E" << grdefault << "] Go Back to Main Menu" << endl
 		<< "[" << fggreen << "C" << grdefault << "] Create a new Topic" << endl 
-		<< "[" << fgblue << "T" << grdefault << "] Sort Topics by Time" << endl
-		<< "[" << fgblue << "A" << grdefault << "] Sort Topics by Alphabet" << endl << endl
+		<< "[" << fgblue; 
+
+	if (sortState == 1)
+		cout << grunderline;
+	
+	cout << "T" << grdefault << "] Sort Topics by Time" << endl
+		<< "[" << fgblue;
+	
+	if (sortState == 2)
+		cout << grunderline;
+
+	cout << "A" << grdefault << "] Sort Topics by Alphabet" << endl << endl
 		<< fgmagenta << "Your Choice? " << grdefault << save;
 
 	cout << go_down_vts(3) << set_x_pos_vts(0)
@@ -337,10 +361,12 @@ bool Application::handleViewTopicsMenu(Vector<string>& topicNames, string choice
 		promptNewTopic(topicNames);
 	else if (choice == "T")
 	{
+		sortState = 1;
 		topicDA.sortByLatest();
 	}
 	else if (choice == "A")
 	{
+		sortState = 2;
 		topicDA.sortByAlphabet();
 	}
 	else
