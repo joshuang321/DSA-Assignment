@@ -18,8 +18,11 @@ private:
 	AccountDA accDA;
 	TopicDA topicDA;
 
+	int sortState;
+
 public:
 	Application();
+	~Application();
 
 	int Run();
 
