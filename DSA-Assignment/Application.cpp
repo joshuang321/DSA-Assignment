@@ -537,12 +537,5 @@ bool Application::handleEditPost(Topic& topic, Post& post)
 {
 	string newText;
 
-	topicDA
-
 	return true;
-}
-
-bool Application::handleDeletePost(Topic& topic, Post& post)
-{
-	topicDA.pop
 }
