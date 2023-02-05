@@ -29,7 +29,7 @@ int main(void)
 		cout << "Failed to set console mode!" << endl;
 		return 0;
 	}
-	if (!SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), dwOldConsoleMode
+	if (!SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), dwOldConsoleMode
 		| ENABLE_VIRTUAL_TERMINAL_PROCESSING))
 	{
 		cout << "Failed to set console mode!" << endl;
