@@ -51,6 +51,7 @@ static std::string set_prev_n_line_vts(int nLine)
 	return "\x1b[" + std::to_string(nLine) + "F";
 }
 
+/* Application constructor to read configuration (filter sort settings for topic) */
 Application::Application() : isLoggedIn(false), acc(NULL)
 {
 	std::string strline;
@@ -60,6 +61,7 @@ Application::Application() : isLoggedIn(false), acc(NULL)
 	sortState = atoi(strline.c_str());
 }
 
+/* Application de-constructor to write configuration into a text file */
 Application::~Application()
 {
 	std::ofstream ofConfigFile("AccountConfig.txt");
@@ -67,6 +69,7 @@ Application::~Application()
 	ofConfigFile << sortState;
 }
 
+/* Function to handle the start-up of the application */
 int Application::Run()
 {
 	cout << clrsr;
@@ -74,6 +77,7 @@ int Application::Run()
 
 	while (true)
 	{
+		//checks if user is logged in and displays the menu accordingly
 		if (isLoggedIn)
 			printMainMenu();
 		else
@@ -91,7 +95,7 @@ int Application::Run()
 	return 0;
 }
 
-//function to print the login menu
+/* Function that displays the login menu */
 void Application::printLoginMenu()
 {
 	cout << fggreen << "==========" << fgblue << "LOGIN MENU" << fggreen << "==========" << grdefault << std::endl
@@ -101,7 +105,7 @@ void Application::printLoginMenu()
 		<< fgmagenta << "Your choice? " << grdefault;
 }
 
-//function to print the main menu (logged in)
+/* Function that displays the main menu if the user is logged in */
 void Application::printMainMenu()
 {
 	cout << fgyellow << "Logged in as " << acc->username << grdefault << endl;
@@ -128,23 +132,28 @@ _________________________________________________________
 		<< fgmagenta << "Your choice? " << grdefault;
 }
 
+/* Function to handle the login menu when user is not logged in */
 bool Application::handleLoginMenu(int choice)
 {
 	switch (choice)
 	{
-	case 1:
+		//if user chooses to close the application (close with this function to save new changes)
+	case 1: 
 		cout << clrsr << fgmagenta << "Goodbye!" << grdefault << endl;
 		return false;
 
-	case 2:
+		//if user chooses to create an account
+	case 2: 
 		isLoggedIn = promptForRegisterUser();
 		break;
 
-	case 3:
+		//if user chooses to login to existing account
+	case 3: 
 		isLoggedIn = promptForLoginUser();
 		break;
 
-	default:
+		//if user does not choose a valid option
+	default: 
 		cout << fgred << "Invalid Option!" << grdefault << endl;
 		Sleep(SLP_UI_DELAY);
 		cout << clrsr;
@@ -155,6 +164,7 @@ bool Application::handleLoginMenu(int choice)
 	return true;
 }
 
+/* Function to handle main menu when user is logged in */
 void Application::handleMainMenu(int choice)
 {
 	switch (choice)
@@ -175,6 +185,7 @@ void Application::handleMainMenu(int choice)
 		handleChangePassword();
 		break;
 
+		//if user does not choose a valid option
 	default:
 		cout << fgred << "Invalid Option!" << grdefault << endl;
 		Sleep(SLP_UI_DELAY);
@@ -184,44 +195,54 @@ void Application::handleMainMenu(int choice)
 	}
 }
 
+/* Function that prompts user for log in to existing account */
 bool Application::promptForLoginUser()
 {
 	cout << clrsr;
 	string username, password;
 
+	//prompt user for username and password
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	cout << "Username: ";
 	getline(cin, username);
 	cout << "Password: ";
 	getline(cin, password);
 
+	//check if the user exists in the Account data file
 	if (accDA.findUser(acc, username, password))
 	{
+		//display log in success
 		cout << clrsr << fggreen << "Logged In Successfully!" << endl;
 		Sleep(SLP_UI_DELAY);
 		cout << clrsr;
 		return true;
 	}
 
+	//display log in failure
 	cout << clrsr << fgred << "Failed to Log In!" << endl;
 	Sleep(SLP_UI_DELAY);
 	cout << clrsr;
 	return false;
 }
 
+/* Function that prompts user to register a new account */
 bool Application::promptForRegisterUser()
 {
 	cout << clrsr;
 	string username, password;
 
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
 	//prompt user for new username and password
 	while (true)
 	{
 		cout << "Username: ";
 		getline(cin, username);
+
 		if (username.length() > 0)
 			break;
+
+		//check if username input is empty
 		cout << fgred << "Username cannot be empty!" << grdefault;
 		Sleep(SLP_UI_DELAY);
 		cout << delline << set_prev_n_line_vts(1) << delline;
@@ -230,8 +251,11 @@ bool Application::promptForRegisterUser()
 	{
 		cout << "Password: ";
 		getline(cin, password);
+
 		if (password.length() > 0)
 			break;
+
+		//check if password input is empty
 		cout << fgred << "Password cannot be empty!" << grdefault;
 		Sleep(SLP_UI_DELAY);
 		cout << delline << set_prev_n_line_vts(1) << delline;
@@ -242,12 +266,14 @@ bool Application::promptForRegisterUser()
 	{
 		acc = accDA.addObject(Account(username, password));
 
+		//display account register success
 		cout << clrsr << fggreen << "Account Registered Successfully!" << endl;
 		Sleep(SLP_UI_DELAY);
 		cout << clrsr;
 		return true;
 	}
 	
+	//display account register failure
 	cout << clrsr << fgred << "There exists an account with the same username! Please try again!" << endl;
 	Sleep(SLP_UI_DELAY + 200);
 	cout << clrsr;
@@ -255,6 +281,7 @@ bool Application::promptForRegisterUser()
 	return false;
 }
 
+/* Function to handle changing of password for the account logged in */
 bool Application::handleChangePassword()
 {
 	cout << clrsr;
@@ -266,6 +293,7 @@ bool Application::handleChangePassword()
 	cout << "Enter old password: ";
 	getline(cin, oldPassword);
 
+	//checks if the input matches the old password
 	bool oldMatch = acc->isCorrect(oldPassword);
 
 	if (oldMatch)
@@ -278,15 +306,18 @@ bool Application::handleChangePassword()
 			if (newPassword.length() > 0)
 				break;
 
+			//check if password input is empty
 			cout << fgred << "Password cannot be empty!" << grdefault;
 			Sleep(SLP_UI_DELAY);
 			cout << delline << set_prev_n_line_vts(1) << delline;
 		}
 
+		//replaces the account with the new password
 		std::string accname = acc->username;
 		accDA.removeObject(*acc);
 		acc = accDA.addObject(Account(accname, newPassword));
 
+		//display password change success
 		cout << clrsr << fggreen << "Password changed successfully!" << endl;
 		Sleep(SLP_UI_DELAY);
 		cout << clrsr;
@@ -294,6 +325,7 @@ bool Application::handleChangePassword()
 	}
 	else
 	{
+		//display password change failure
 		cout << clrsr << fgred << "Old password does not match!" << endl;
 		Sleep(SLP_UI_DELAY);
 		cout << clrsr;
@@ -301,6 +333,7 @@ bool Application::handleChangePassword()
 	}
 }
 
+/* Function to handle viewing of topics if user chooses the option */
 void Application::handleViewTopics()
 {
 	std::string choice;
@@ -318,19 +351,21 @@ void Application::handleViewTopics()
 	}
 }
 
-//when you select option "2" in the main menu
+/* Function that displays topics */
 void Application::printViewTopicsMenu(Vector<string>& topicNames)
 {
 	cout << "[" << fgred << "E" << grdefault << "] Go Back to Main Menu" << endl
 		<< "[" << fggreen << "C" << grdefault << "] Create a new Topic" << endl 
 		<< "[" << fgblue; 
 
+	//check if the topic sorting state is saved to sort by latest to earliest
 	if (sortState == 1)
 		cout << grunderline;
 	
 	cout << "T" << grdefault << "] Sort Topics by Time" << endl
 		<< "[" << fgblue;
 	
+	//check if the topic sorting state is saved to sort by alphabetical order
 	if (sortState == 2)
 		cout << grunderline;
 
@@ -340,6 +375,7 @@ void Application::printViewTopicsMenu(Vector<string>& topicNames)
 	cout << go_down_vts(3) << set_x_pos_vts(0)
 		<< fgcyan << "Topics:" << grdefault << endl;
 
+	//iterates through the topicNames list to display existing topics
 	for (int i = 0; i < topicNames.count(); i++)
 	{
 		cout << fgyellow << '[' << i + 1 << "] " << grunderline << topicNames[i] << grdefault << endl;
@@ -348,22 +384,27 @@ void Application::printViewTopicsMenu(Vector<string>& topicNames)
 	cout << restore;
 }
 
+/* Function to handle topic menu and direct to user's choice */
 bool Application::handleViewTopicsMenu(Vector<string>& topicNames, string choice)
 {
 	int nIndex;
 
+	//if user chooses to exit topic menu
 	if (choice == "E")
 	{
 		cout << clrsr;
 		return false;
 	}
+	//if user chooses to create a new topic
 	if (choice == "C")
 		promptNewTopic(topicNames);
+	//if user chooses to sort the topic list by latest to earliest
 	else if (choice == "T")
 	{
 		sortState = 1;
 		topicDA.sortByLatest();
 	}
+	//if user chooses to sort the topic list by alphabetical order
 	else if (choice == "A")
 	{
 		sortState = 2;
@@ -371,9 +412,11 @@ bool Application::handleViewTopicsMenu(Vector<string>& topicNames, string choice
 	}
 	else
 	{
+		//if user chooses to view a topic (inputs the topic number)
 		nIndex = atoi(choice.c_str());
 		if (nIndex && topicNames.count() >= nIndex)
 			handleViewTopic(nIndex-1);
+		//if user inputs invalid option
 		else
 		{
 			cout << fgred << "Invalid Input! Please try again!" << grdefault;
@@ -386,15 +429,18 @@ bool Application::handleViewTopicsMenu(Vector<string>& topicNames, string choice
 	return true;
 }
 
+/* Function to handle the creation of a new topic */
 void Application::promptNewTopic(Vector<string>& topicNames)
 {
 	std::string topictitle, topicdesc;
 	
+	//prompt user to enter topic details
 	cout << clrsr << "Topic Title: ";
 	getline(cin, topictitle);
 	cout << "Topic Description: ";
 	getline(cin, topicdesc);
 
+	//check if topic title already exists
 	if (!topicDA.findTopic(topictitle))
 	{
 		topicNames.push(topicDA.addObject(Topic(topictitle, topicdesc, acc->username))->getTitle());
@@ -406,6 +452,7 @@ void Application::promptNewTopic(Vector<string>& topicNames)
 	}
 }
 
+/* Function to handle viewing the topic selected */
 void Application::handleViewTopic(int nIndex)
 {
 	string choice;
@@ -420,6 +467,7 @@ void Application::handleViewTopic(int nIndex)
 	}
 }
 
+/* Function to display the menu of the topic selected */
 void Application::printViewTopicMenu(Topic& topic)
 {
 	cout << "[" << fgred << "E" << grdefault << "] Go back to other Topics" << endl
@@ -436,6 +484,7 @@ void Application::printViewTopicMenu(Topic& topic)
 	cout << go_down_vts(3) << set_x_pos_vts(0)
 		<< fgcyan << "Posts:" << grdefault;
 
+	//iterates through the post list under the topic and displays their individual information
 	for (int i = 0; i < topic.posts.count(); i++)
 	{
 		cout << endl << fgyellow << '[' << i + 1 << "] " << grunderline << topic.posts[i].getTitle() <<  grdefault << endl
@@ -447,25 +496,31 @@ void Application::printViewTopicMenu(Topic& topic)
 	cout << restore;
 }
 
+/* Function to handle the menu of the selected topic and direct to user's choice */
 bool Application::handleViewTopicMenu(Topic& topic, string choice)
 {
 	int nIndex;
 
+	//if user chooses to return back to the topics menu
 	if ("E" == choice)
 		return false;
+	//if user chooses to like the topic
 	else if ("L" == choice)
 	{
 		topic.addLike();
 
 		cout << clrsr;
 	}
+	//if user chooses to create a new post under the topic
 	else if ("R" == choice)
 		promptNewPost(topic);
 	else
 	{
+		//if user chooses to view a specific post under the topic
 		nIndex = atoi(choice.c_str());
 		if (nIndex && topic.posts.count() >= nIndex)
 			handleViewPost(topic, topic.posts[nIndex - 1], topic.getUsername());
+		//if user chooses an invalid option
 		else
 		{
 			cout << fgred << "Invalid Input! Please try again!" << grdefault;
@@ -477,10 +532,12 @@ bool Application::handleViewTopicMenu(Topic& topic, string choice)
 	return true;
 }
 
+/* Function to handle the creation of a post under the topic */
 void Application::promptNewPost(Topic& topic)
 {
 	std::string postText;
 
+	//prompts user to enter post text
 	cout << clrsr << "Enter text: ";
 	getline(cin, postText);
 	cout << clrsr;
@@ -488,6 +545,7 @@ void Application::promptNewPost(Topic& topic)
 	topic.posts.push(Post(postText, acc->username));
 }
 
+/* Function to handle viewing the post selected under the topic */
 void Application::handleViewPost(Topic& topic, Post& post, std::string username)
 {
 	std::string choice;
@@ -505,12 +563,14 @@ void Application::handleViewPost(Topic& topic, Post& post, std::string username)
 	cout << clrsr;
 }
 
+/* Function to display the menu of the post under the topic */
 void Application::printViewPostMenu(Post& post)
 {
 	cout << "[" << fgred << "E" << grdefault << "] Go Back to Main Menu" << endl
 		<< "[" << fgblue << "L" << grdefault << "] Like Post" << endl
 		<< "[" << fggreen << "R" << grdefault << "] Create a new Reply" << endl;
 
+	//functions (edit & delete post) appear only if the post belongs to user's account
 	if (post.getUsername() == acc->username)
 	{
 		cout << "[" << fggreen << "P" << grdefault << "] Edit Post" << endl;
@@ -526,6 +586,7 @@ void Application::printViewPostMenu(Post& post)
 	cout << go_down_vts(3) << set_x_pos_vts(0)
 		<< fgcyan << "Replies:" << grdefault << endl;
 		
+	//iteratest through list of replies under the post and displays their information
 	for (int i = 0; i < post.reply.count(); i++)
 	{
 		cout << endl << fgyellow << '[' << i + 1 << "] " << grunderline << post.reply[i].getTitle() << grdefault << endl
@@ -537,26 +598,33 @@ void Application::printViewPostMenu(Post& post)
 	cout << restore;
 }
 
+/* Function to handle the menu of the selected post and direct to user's choice */
 bool Application::handleViewPostMenu(Topic& topic, Post& post, std::string username, std::string choice)
 {
+	//if user chooses to go back to topic menu
 	if ("E" == choice)
 		return false;
+	//if user chooses to like the post
 	else if ("L" == choice)
 	{
 		post.addLike();
 		
 		cout << clrsr;
 	}
+	//if user chooses to reply to the post
 	else if ("R" == choice)
 		promptNewReply(post);
+	//if user chooses to edit the post (available if the post belongs to user's account)
 	else if (("P" == choice) && (post.getUsername() == username))
 		handleEditPost(topic, post);
+	//if user chooses to delete the post (available if the post belongs to user's account)
 	else if (("D" == choice) && (post.getUsername() == username))
 	{
 		handleDeletePost(topic, post);
 
 		return false;
 	}
+	//if user chooses an invalid choice
 	else
 	{
 		cout << fgred << "Invalid Input! Please try again!" << grdefault;
@@ -567,10 +635,12 @@ bool Application::handleViewPostMenu(Topic& topic, Post& post, std::string usern
 	return true;
 }
 
+/* Function to handle creation of new reply under the post */
 void Application::promptNewReply(Post& post)
 {
 	std::string postreply;
 
+	//prompts user to enter their reply
 	cout << "Enter reply: ";
 	getline(cin, postreply);
 
@@ -579,14 +649,17 @@ void Application::promptNewReply(Post& post)
 	cout << clrsr;
 }
 
+/* Function to handle editing the post (available if the post belongs to user's account) */
 bool Application::handleEditPost(Topic& topic, Post& post)
 {
 	string newText;
 	string username = post.getUsername();
 
+	//prompts user to enter new post text
 	cout << "Enter new post text: ";
 	getline(cin, newText);
 
+	//check if post text is empty
 	if (newText.length() == 0)
 	{
 		cout << fgred << "Text cannot be empty!" << grdefault;
@@ -596,6 +669,7 @@ bool Application::handleEditPost(Topic& topic, Post& post)
 		return false;
 	}
 
+	//replaces the instance of post
 	topic.posts.pop(post);
 	topic.posts.push(Post(newText, username));
 	
@@ -603,6 +677,7 @@ bool Application::handleEditPost(Topic& topic, Post& post)
 	return true;
 }
 
+/* Function to handle deletion of post (available if the post belongs to user's account) */
 bool Application::handleDeletePost(Topic& topic, Post& post)
 {
 	topic.posts.pop(post);

@@ -15,6 +15,7 @@ bool AccountDA::findUser(Account*& pAcc, std::string username, std::string passw
 	return false;
 }
 
+/* Function that finds a user by username */
 bool AccountDA::findUser(std::string username)
 {
 	return cacheData.exists(username);
