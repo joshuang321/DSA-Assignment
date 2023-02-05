@@ -441,7 +441,7 @@ void Application::printViewTopicMenu(Topic& topic)
 		cout << endl << fgyellow << '[' << i + 1 << "] " << grunderline << topic.posts[i].getTitle() <<  grdefault << endl
 			<< "Posted by " << topic.posts[i].getUsername() << endl
 			<< "Posted at " << topic.posts[i].getTimeCreated() << endl
-			<< topic.posts[i].getLikes() << " Likes" << endl << endl;
+			<< topic.posts[i].getLikes() << " Likes" << endl;
 	}
 
 	cout << restore;
@@ -528,7 +528,10 @@ void Application::printViewPostMenu(Post& post)
 		
 	for (int i = 0; i < post.reply.count(); i++)
 	{
-		cout << post.reply[i].getTitle() << endl;
+		cout << endl << fgyellow << '[' << i + 1 << "] " << grunderline << post.reply[i].getTitle() << grdefault << endl
+			<< "Posted by " << post.reply[i].getUsername() << endl
+			<< "Posted at " << post.reply[i].getTimeCreated() << endl
+			<< post.reply[i].getLikes() << " Likes" << endl;
 	}
 
 	cout << restore;
@@ -553,6 +556,12 @@ bool Application::handleViewPostMenu(Topic& topic, Post& post, std::string usern
 		handleDeletePost(topic, post);
 
 		return false;
+	}
+	else
+	{
+		cout << fgred << "Invalid Input! Please try again!" << grdefault;
+		Sleep(SLP_UI_DELAY);
+		cout << restore << clrsr;
 	}
 
 	return true;

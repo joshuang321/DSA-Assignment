@@ -49,13 +49,13 @@ TopicDA::~TopicDA()
 			}
 		}
 
+		//WARNING duplicate replies written into file
 		for (int j = 1; j < cacheData[i].posts.count(); j++)
 		{
 			ofDataFile << '\n' << cacheData[i].posts[j];
 
 			std::ofstream ofCommentFile(cacheData[i].getTitle() + "_" +
 				cacheData[i].posts[j].getTitle() + ".txt");
-
 
 			if (cacheData[i].posts[j].reply.count() != 0)
 				ofCommentFile << cacheData[i].posts[j].reply[0];
