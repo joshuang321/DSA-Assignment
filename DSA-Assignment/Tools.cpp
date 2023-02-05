@@ -26,6 +26,8 @@ namespace Tools
 			strline = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
 			ndelim = strline.find(delim);
 		}
+		strs.push(std::string(strline));
+
 		return strs;
 	}
 

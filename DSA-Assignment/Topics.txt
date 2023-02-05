@@ -1,4 +1,4 @@
-Yo;2023-02-05 13:24:50;Joshua Ng;0;this is cringe
+Yo;2023-02-05 13:24:50;Joshua Ng;1;this is cringe
 Alpha;2023-02-04 19:04:09;user2;0;bet
 java;2023-02-01 15:51:13;user3;0;y3
 cmf;2023-02-01 14:30:07;user1;0;y2
