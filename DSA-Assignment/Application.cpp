@@ -548,6 +548,29 @@ void Application::promptNewPost(Topic& topic)
 	getline(cin, postText);
 	cout << clrsr;
 
+	if (postText.length() == 0)
+	{
+		cout << fgred << "Text cannot be empty!" << grdefault;
+		Sleep(SLP_UI_DELAY);
+		cout << delline << set_prev_n_line_vts(1) << delline;
+		cout << clrsr;
+
+		return;
+	}
+
+	for (int i = 0; i < topic.posts.count(); i++)
+	{
+		if (postText == topic.posts[i].getTitle())
+		{
+			cout << fgred << "Post already exists!" << grdefault;
+			Sleep(SLP_UI_DELAY);
+			cout << delline << set_prev_n_line_vts(1) << delline;
+			cout << clrsr;
+
+			return;
+		}
+	}
+
 	topic.posts.push(Post(postText, acc->username));
 }
 
@@ -572,7 +595,7 @@ void Application::handleViewPost(Topic& topic, Post& post, std::string username)
 /* Function to display the menu of the post under the topic */
 void Application::printViewPostMenu(Post& post)
 {
-	cout << "[" << fgred << "E" << grdefault << "] Go Back to Main Menu" << endl
+	cout << "[" << fgred << "E" << grdefault << "] Go Back to Topic" << endl
 		<< "[" << fgblue << "L" << grdefault << "] Like Post" << endl
 		<< "[" << fggreen << "R" << grdefault << "] Create a new Reply" << endl;
 
@@ -597,8 +620,7 @@ void Application::printViewPostMenu(Post& post)
 	{
 		cout << endl << fgyellow << '[' << i + 1 << "] " << grunderline << post.reply[i].getTitle() << grdefault << endl
 			<< "Posted by " << post.reply[i].getUsername() << endl
-			<< "Posted at " << post.reply[i].getTimeCreated() << endl
-			<< post.reply[i].getLikes() << " Likes" << endl;
+			<< "Posted at " << post.reply[i].getTimeCreated() << endl << endl;
 	}
 
 	cout << restore;
@@ -650,6 +672,17 @@ void Application::promptNewReply(Post& post)
 	cout << "Enter reply: ";
 	getline(cin, postreply);
 
+	//check if post text is empty
+	if (postreply.length() == 0)
+	{
+		cout << fgred << "Reply cannot be empty!" << grdefault;
+		Sleep(SLP_UI_DELAY);
+		cout << delline << set_prev_n_line_vts(1) << delline;
+		cout << clrsr;
+
+		return;
+	}
+
 	post.reply.push(Comment(postreply, acc->username));
 
 	cout << clrsr;
@@ -671,6 +704,14 @@ bool Application::handleEditPost(Topic& topic, Post& post)
 		cout << fgred << "Text cannot be empty!" << grdefault;
 		Sleep(SLP_UI_DELAY);
 		cout << delline << set_prev_n_line_vts(1) << delline;
+		cout << clrsr;
+
+		return false;
+	}
+
+	if (newText == post.getTitle())
+	{
+		cout << clrsr;
 
 		return false;
 	}
