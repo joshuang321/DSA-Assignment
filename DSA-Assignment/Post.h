@@ -4,7 +4,8 @@
 #include "Comment.h"
 
 //
-class Post : public Comment {
+class Post : public Comment
+{
 	//attributes
 private:
 
@@ -15,7 +16,7 @@ public:
 	Post(const Post& post);
 	Post& operator=(const Post & post) = default;
 	Post(Post&& post);
-	
+
 	Post(std::string text, std::string username);
 	Post(std::string strline);
 

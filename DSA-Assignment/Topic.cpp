@@ -43,7 +43,7 @@ Topic::Topic(std::string strline) : Comment(strline.substr(0, strline.find_last_
 	description = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
 }
 
-void Topic::addNewPost(Post newPost) { posts.push(std::move(newPost)); }
+void Topic::addNewPost(Post&& newPost) { posts.push(std::move(newPost)); }
 
 std::string Topic::getDescription() { return description; }
 

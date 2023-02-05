@@ -2,13 +2,13 @@
 
 #include <string>
 
-class Account {
-	//attributes
-private:
-	std::string username;
+class Account
+{
 	std::string password;
-		
+
 public:
+	std::string username;
+
 	Account() { }
 	Account(std::string strline);
 	Account(const Account&);
@@ -17,9 +17,7 @@ public:
 	Account(std::string username, std::string password);
 	Account& operator=(const Account&) = default;
 
-	const std::string& getUsername();
 	bool isCorrect(std::string password);
-	void changePassword(std::string password);
 
 	friend std::ostream& operator<<(std::ostream& os, Account& acc);
 	bool operator==(Account& acc);

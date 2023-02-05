@@ -54,7 +54,7 @@ void Comment::addLike() { likes++; }
 
 bool Comment::isLaterThan(Comment& comment)
 {
-	return timeCreated < comment.timeCreated;
+	return timeCreated > comment.timeCreated;
 }
 
 std::ostream& operator << (std::ostream& os, Comment& comment)

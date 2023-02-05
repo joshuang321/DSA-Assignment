@@ -44,9 +44,11 @@ public:
 
 	Iterator end() { return Iterator(&ptr[nElementCount]); }
 
-	Vector() : maxElements(4), nElementCount(0)
+	Vector() : maxElements(4), nElementCount(0), ptr(NULL)
 	{
-		ptr = NULL;
+#if defined (_DEBUG)
+		OutputDebugStringA("Vector_DC\n");
+#endif
 	}
 
 	~Vector() 
@@ -57,6 +59,9 @@ public:
 
 	Vector(const Vector& vec)
 	{
+#if defined (_DEBUG)
+		OutputDebugStringA("Vector_CC\n");
+#endif
 		ptr = NULL;
 		if (vec.ptr)
 		{
@@ -73,16 +78,21 @@ public:
 	
 	Vector(Vector&& vec)
 	{
+#if defined (_DEBUG)
+		OutputDebugStringA("Vector_MC\n");
+#endif
 		ptr = vec.ptr;
 		maxElements = vec.maxElements;
 		nElementCount = vec.nElementCount;
 		
-		ptr = NULL;
+		vec.ptr = NULL;
 		vec.maxElements = 4;
 		vec.nElementCount = 0;
 	}
 
-	T* push(T item)
+	Vector& operator=(Vector&&) = default;
+
+	T* push(T&& item)
 	{
 		if (ptr == NULL)
 			ptr = new T[maxElements];
@@ -100,6 +110,25 @@ public:
 
 		ptr[nElementCount++] = std::move(item);
 		return &ptr[nElementCount - 1];
+	}
+
+	void add(T item)
+	{
+		if (ptr == NULL)
+			ptr = new T[maxElements];
+		else if (maxElements == (nElementCount + 1))
+		{
+			maxElements += 4;
+			T* new_ptr = new T[maxElements];
+
+			for (int i = 0; i < nElementCount; i++)
+				new_ptr[i] = std::move(ptr[i]);
+
+			delete[] ptr;
+			ptr = new_ptr;
+		}
+
+		ptr[nElementCount++] = item;
 	}
 
 	void pop(T& item)

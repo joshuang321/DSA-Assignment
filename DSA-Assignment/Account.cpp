@@ -36,11 +36,7 @@ Account::Account(std::string strline)
 	username = strline.substr(0, ndelim);
 }
 
-const std::string& Account::getUsername() { return username; }
-
 bool Account::isCorrect(std::string password) { return password == this->password; }
-
-void Account::changePassword(std::string password) { this->password = password; }
 
 std::ostream& operator<<(std::ostream& os, Account& acc)
 {

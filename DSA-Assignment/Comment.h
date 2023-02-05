@@ -14,6 +14,7 @@ protected:
 	Comment(const Comment& comment);
 	Comment& operator=(const Comment& comment) = default;
 	Comment(Comment&& comment);
+	Comment& operator=(Comment&&) = default;
 
 	Comment(std::string strline);
 	Comment(std::string title, std::string username);

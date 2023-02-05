@@ -6,6 +6,9 @@
 
 class TopicDA : public DataAccessor<Topic>
 {
+	static bool compareTime(Topic& a, Topic& b);
+	static bool compareTitle(Topic& a, Topic& b);
+
 public:
 
 	TopicDA();
@@ -14,6 +17,5 @@ public:
 	Topic& getTopic(int nIndex);
 	bool findTopic(std::string topicName);
 	void sortByLatest();
-	int hash(std::string topicName);
 	void sortByAlphabet();
 };

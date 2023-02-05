@@ -2,6 +2,7 @@
 
 #include "TopicDA.h"
 #include <iostream>
+#include "Tools.h"
 static const char* TopicSaveFilename = "Topics.txt";
 
 TopicDA::TopicDA() : DataAccessor<Topic>(TopicSaveFilename)
@@ -30,12 +31,16 @@ TopicDA::~TopicDA()
 	}
 }
 
+bool TopicDA::compareTime(Topic& a, Topic& b) { return a.isLaterThan(b); }
+
+bool TopicDA::compareTitle(Topic& a, Topic& b) { return a.getTitle() < b.getTitle(); }
+
 Vector<std::string> TopicDA::getTopics()
 {
 	Vector<std::string> topicNames;
 
 	for (int i = 0; i < cacheData.count(); i++)
-		topicNames.push(cacheData[i].getTitle());
+		topicNames.add(cacheData[i].getTitle());
 	return topicNames;
 }
 
@@ -55,43 +60,11 @@ bool TopicDA::findTopic(std::string topicName)
 //use selection sort to sort topics by time created
 void TopicDA::sortByLatest()
 {
-	for (int i = 0; i < cacheData.count(); i++)
-	{
-		int min_index = i;
-
-		for (int j = i + 1; j < cacheData.count(); j++)
-		{
-			if (cacheData[j].isLaterThan(cacheData[min_index]))
-			{
-				min_index = j;
-
-				break;
-			}
-		}
-
-		Topic temp = cacheData[i];
-		cacheData[i] = cacheData[min_index];
-		cacheData[min_index] = temp;
-	}
+	Tools::selectionSort(cacheData, compareTime);
 }
 
 //use selection sort to sort topics by alphabet
 void TopicDA::sortByAlphabet()
 {
-	for (int i = 0; i < cacheData.count(); i++)
-	{
-		int min_index = i;
-
-		for (int j = i + 1; j < cacheData.count(); j++)
-		{
-			if (cacheData[j].getTitle() < cacheData[min_index].getTitle())
-			{
-				min_index = j;
-			}
-		}
-
-		Topic temp = cacheData[i];
-		cacheData[i] = cacheData[min_index];
-		cacheData[min_index] = temp;
-	}
+	Tools::selectionSort(cacheData, compareTitle);
 }

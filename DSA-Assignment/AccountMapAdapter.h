@@ -4,7 +4,7 @@
 #include "Account.h"
 #include "Map.h"
 
-class AccountMapAdapter : public Map<std::string&, Account>
+class AccountMapAdapter : public Map<std::string, Account>
 {
 public:
 	AccountMapAdapter() : 
@@ -21,12 +21,12 @@ public:
 		Map(std::move(adapter))
 	{ }
 
-	Account* push(Account acc)
+	Account* push(Account&& acc)
 	{
-		Node* pNode = Map::push((std::string&) acc.getUsername(), acc);
-		pNode->key = pNode->getValue().getUsername();
-		return &(pNode->value);
+		Node* pNode = Map::push(acc.username);
+		pNode->value = acc;
+		return &pNode->value;
 	}
 
-	void pop(Account& acc) { Map::pop((std::string&)acc.getUsername(), acc); }
+	void pop(Account& acc) { Map::pop((std::string&)acc.username, acc); }
 };
