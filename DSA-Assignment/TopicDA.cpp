@@ -33,7 +33,21 @@ TopicDA::~TopicDA()
 		std::ofstream ofDataFile(cacheData[i].getTitle() + ".txt");
 
 		if (cacheData[i].posts.count() != 0)
+		{
 			ofDataFile << cacheData[i].posts[0];
+
+			std::ofstream ofCommentFile(cacheData[i].getTitle() + "_" +
+				cacheData[i].posts[0].getTitle() + ".txt");
+
+
+			if (cacheData[i].posts[0].reply.count() != 0)
+				ofCommentFile << cacheData[i].posts[0].reply[0];
+
+			for (int k = i; k < cacheData[i].posts[0].reply.count(); k++)
+			{
+				ofCommentFile << '\n' << cacheData[i].posts[0].reply[k];
+			}
+		}
 
 		for (int j = 1; j < cacheData[i].posts.count(); j++)
 		{
@@ -42,7 +56,11 @@ TopicDA::~TopicDA()
 			std::ofstream ofCommentFile(cacheData[i].getTitle() + "_" +
 				cacheData[i].posts[j].getTitle() + ".txt");
 
-			for (int k = 0; k < cacheData[i].posts[j].reply.count(); k++)
+
+			if (cacheData[i].posts[j].reply.count() != 0)
+				ofCommentFile << cacheData[i].posts[j].reply[0];
+
+			for (int k = i; k < cacheData[i].posts[j].reply.count(); k++)
 			{
 				ofCommentFile << '\n' << cacheData[i].posts[j].reply[k];
 			}

@@ -38,7 +38,7 @@ Post::Post(string title, string username) :
 	reply()
 { }
 
-Post::Post(string strline) : Comment(strline.substr(0, strline.find_last_of(';')))
+Post::Post(string strline) : Comment(strline)
 {
 
 }
