@@ -10,6 +10,7 @@
 #include "Account.h"
 #include "Map.h"
 
+/* Used as an adapter to the Map to the DataAccessor */
 class AccountMapAdapter : public Map<std::string, Account>
 {
 public:
@@ -27,6 +28,7 @@ public:
 		Map(std::move(adapter))
 	{ }
 
+	/* Uses the username of the Account object as key */
 	Account* push(Account&& acc)
 	{
 		Node* pNode = Map::push(acc.username);
@@ -34,5 +36,6 @@ public:
 		return &pNode->value;
 	}
 
+	/* Pops the Account object using the username as key */
 	void pop(Account& acc) { Map::pop((std::string&)acc.username, acc); }
 };

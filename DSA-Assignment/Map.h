@@ -11,6 +11,7 @@
 
 const int  HASH_SIZE = 37;
 
+/* Used for constant time lookup for users */
 template<class K, class V>
 class Map
 {
@@ -42,6 +43,8 @@ private:
 	Node* items[HASH_SIZE];
 
 protected:
+
+	/* Constructors */
 	Map()
 	{
 		for (int i = 0; i < HASH_SIZE; i++)
@@ -100,6 +103,7 @@ protected:
 		}
 	}
 
+	/* Pushes the object using a key and returns the node for insertion by subclass */
 	Node* push(K key)
 	{
 		int hashIndex = Hash::hash<HASH_SIZE>(key);
@@ -116,6 +120,7 @@ protected:
 		return items[hashIndex];
 	}
 
+	/* Pops the item using the key */
 	void pop(K key, V& item)
 	{
 		int hashIndex = Hash::hash<HASH_SIZE>(key);
@@ -147,6 +152,7 @@ protected:
 	}
 
 public:
+	/* Gets the pointer to the item using the key, returns true is it gets, and false otherwise */
 	bool get(K key, V*& item)
 	{
 		int hashIndex = Hash::hash<HASH_SIZE>(key);
@@ -174,7 +180,7 @@ public:
 		}
 		return false;
 	}
-
+	/* Returns true if the key exists, false otherwise */
 	bool exists(K& key)
 	{
 		int hashIndex = Hash::hash<HASH_SIZE>(key);
@@ -202,6 +208,7 @@ public:
 		return false;
 	}
 
+	/* Iterator for the Map, see Vector for more details */
 	struct Iterator
 	{
 		using iterator_category = std::forward_iterator_tag;
@@ -222,6 +229,7 @@ public:
 
 		reference operator*() const { return pCurNode->value; }
 		pointer operator->() { return &pCurNode->value; }
+		/* Checks if the curNode next is valid, otherwise iterate through the array until ppEndNode */
 		Iterator& operator++() 
 		{
 			if (pCurNode->next)
@@ -236,6 +244,7 @@ public:
 					while (!*ppBaseNode && ppBaseNode != ppEndNode)
 						ppBaseNode++;
 
+					/* If ppBase is valid, set it to current and return itself */
 					pCurNode = *ppBaseNode;
 				}
 			}
@@ -246,6 +255,7 @@ public:
 		friend bool operator!= (const Iterator& a, const Iterator& b){ return a.pCurNode != b.pCurNode; };
 	};
 
+	/* Finds the first item in the Map */
 	Iterator begin()
 	{
 		for (int i = 0; i < HASH_SIZE; i++)
@@ -255,7 +265,7 @@ public:
 		}
 		return end();
 	}
-
+	/* Treat the end of the array as the end */
 	Iterator end()
 	{
 		return Iterator(&items[HASH_SIZE], &items[HASH_SIZE]);

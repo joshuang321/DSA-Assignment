@@ -10,10 +10,16 @@
 #include "Account.h"
 #include "AccountMapAdapter.h"
 
+/* Used to read and write data for Accounts and data access for external purposes */
 class AccountDA : public DataAccessor<Account, AccountMapAdapter>
 {	
 public:
+	/* Constructor */
 	AccountDA();
+
+	/* Returns true is the account with the username and password exists, false otherwise */
 	bool findUser(Account*& pAcc, std::string username, std::string password);
+
+	/* Returns true is the account with the username */
 	bool findUser(std::string username);
 };

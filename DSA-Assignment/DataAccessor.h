@@ -10,6 +10,7 @@
 #include <fstream>
 #include <string>
 
+/* Used to read and write the file once using class T as the type, and D as the storage type. Vector is used by default as D */
 template <class T, class D=Vector<T>>
 class DataAccessor
 {
@@ -18,6 +19,7 @@ class DataAccessor
 protected:
 	D cacheData;
 
+	/* Read the file and store the data when constructed */
 	DataAccessor(const char* filename) : filename(filename), cacheData()
 	{
 		std::ifstream ifDataFile(filename, std::ifstream::in);
@@ -27,6 +29,7 @@ protected:
 			cacheData.push(T(strline));
 	}
 
+	/* Write to the file when destructed */
 	~DataAccessor()
 	{
 		std::ofstream ofDataFile(filename);
@@ -47,6 +50,7 @@ protected:
 	}
 
 public:
+	/* Uses the push and pop to add and remove objects from persistent data */
 	T* addObject(T&& obj) { return cacheData.push(std::move(obj)); }
 	void removeObject(T& obj) { cacheData.pop(obj); }
 };
