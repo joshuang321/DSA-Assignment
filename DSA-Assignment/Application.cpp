@@ -99,7 +99,7 @@ ______/\\\////////_______/\\\__________/\\\______________
 ______/\\\/______________\/\\\_________\/\\\_____________
 ______/\\\_____________/\\\\\\\\\\\__/\\\\\\\\\\\________ 
 ______\/\\\____________\///////////__\///////////________    
-_______\//\\\________________\/\\\_________\/\\\_________
+_______\//\\\_______________\/\\\_________\/\\\__________
 ________\///\\\______________\///__________\///__________
 ___________\////\\\\\\\\\________________________________
 _______________\/////////________________________________
@@ -439,7 +439,7 @@ bool Application::handleViewTopicMenu(Topic& topic, string choice)
 	{
 		nIndex = atoi(choice.c_str());
 		if (nIndex && topic.posts.count() >= nIndex)
-			handleViewPost(topic.posts[nIndex - 1], topic.getUsername());
+			handleViewPost(topic, topic.posts[nIndex - 1], topic.getUsername());
 		else
 		{
 			cout << fgred << "Invalid Input! Please try again!" << grdefault;
@@ -462,7 +462,7 @@ void Application::promptNewPost(Topic& topic)
 	topic.posts.push(Post(postText, acc->username));
 }
 
-void Application::handleViewPost(Post& post, std::string username)
+void Application::handleViewPost(Topic& topic, Post& post, std::string username)
 {
 	std::string choice;
 	cout << clrsr;
@@ -472,7 +472,7 @@ void Application::handleViewPost(Post& post, std::string username)
 		printViewPostMenu(post);
 
 		getline(cin, choice);
-		if (!handleViewPostMenu(post, username, choice))
+		if (!handleViewPostMenu(topic, post, username, choice))
 			break;
 	}
 
@@ -483,8 +483,15 @@ void Application::printViewPostMenu(Post& post)
 {
 	cout << "[" << fgred << "E" << grdefault << "] Go Back to Main Menu" << endl
 		<< "[" << fgblue << "L" << grdefault << "] Like Post" << endl
-		<< "[" << fggreen << "R" << grdefault << "] Create a new Reply" << endl << endl
-		<< fgyellow << grunderline << post.getTitle() << grdefault <<  endl
+		<< "[" << fggreen << "R" << grdefault << "] Create a new Reply" << endl;
+
+	if (post.getUsername() == acc->getUsername())
+	{
+		cout << "[" << fggreen << "P" << grdefault << "] Edit Post" << endl;
+		cout << "[" << fggreen << "D" << grdefault << "] Delete Post" << endl;
+	}
+
+	cout << endl << fgyellow << grunderline << post.getTitle() << grdefault <<  endl
 		<< "Posted at: " << post.getTimeCreated() << endl
 		<< "Posted by: " << post.getUsername() << endl
 		<< post.getLikes() << " Likes" << endl << endl
@@ -495,7 +502,7 @@ void Application::printViewPostMenu(Post& post)
 	cout << restore;
 }
 
-bool Application::handleViewPostMenu(Post& post, std::string username, std::string choice)
+bool Application::handleViewPostMenu(Topic& topic, Post& post, std::string username, std::string choice)
 {
 	if ("E" == choice)
 		return false;
@@ -507,6 +514,10 @@ bool Application::handleViewPostMenu(Post& post, std::string username, std::stri
 	}
 	else if ("R" == choice)
 		promptNewReply(post);
+	else if (("P" == choice) && (post.getUsername() == acc->getUsername()))
+		handleEditPost(topic, post);
+	else if (("D" == choice) && (post.getUsername() == acc->getUsername()))
+		handleDeletePost(topic, post);
 
 	return true;
 }
@@ -521,4 +532,11 @@ void Application::promptNewReply(Post& post)
 	post.reply = postreply;
 
 	cout << clrsr;
+}
+
+bool Application::handleEditPost(Topic& topic, Post& post)
+{
+	string newText;
+
+	return true;
 }
