@@ -13,8 +13,6 @@
 
 #include <Windows.h>
 
-static const char* TopicSaveFilename = "Topics.txt";
-
 Topic::Topic() : Comment(), description(), posts() { }
 
 Topic::Topic(const Topic& topic) :

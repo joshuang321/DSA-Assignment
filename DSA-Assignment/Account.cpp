@@ -11,8 +11,6 @@
 
 #include <Windows.h>
 
-static const char* AccSaveFilename = "Accounts.dat";
-
 Account::Account(std::string username, std::string password) : username(username),
 	password(password)
 { }
@@ -35,6 +33,7 @@ Account::Account(Account&& acc) :
 #endif
 }
 
+/* String template to save account data */
 Account::Account(std::string strline)
 {
 	size_t ndelim = strline.find(';');
@@ -42,7 +41,9 @@ Account::Account(std::string strline)
 	username = strline.substr(0, ndelim);
 }
 
+/* Function to check if the account password matches the password input */
 bool Account::isCorrect(std::string password) { return password == this->password; }
+
 
 std::ostream& operator<<(std::ostream& os, Account& acc)
 {
