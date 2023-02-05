@@ -214,6 +214,15 @@ bool Application::promptForLoginUser()
 	cout << "Password: ";
 	getline(cin, password);
 
+	//check if username is empty
+	if (username.length() == 0)
+	{
+		cout << clrsr << fgred << "Username cannot be empty!" << endl;
+		Sleep(SLP_UI_DELAY);
+		cout << clrsr;
+		return false;
+	}
+
 	//check if the user exists in the Account data file
 	if (accDA.findUser(acc, username, password))
 	{
