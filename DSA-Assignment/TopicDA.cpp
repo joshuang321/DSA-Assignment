@@ -13,6 +13,7 @@ static const char* TopicSaveFilename = "Topics.txt";
 
 TopicDA::TopicDA() : DataAccessor<Topic>(TopicSaveFilename)
 {
+	/* Gets the posts for each topic */
 	for (int i = 0; i < cacheData.count(); i++)
 	{
 		std::ifstream ifDataFile(cacheData[i].getTitle() + ".txt", std::ifstream::in);
@@ -21,6 +22,7 @@ TopicDA::TopicDA() : DataAccessor<Topic>(TopicSaveFilename)
 		while (std::getline(ifDataFile, strline))
 			cacheData[i].posts.push(Post(strline));
 
+		/* Get the comments for each posts */
 		for (int j = 0; j < cacheData[i].posts.count(); j++)
 		{
 			std::ifstream ifCommentFile(cacheData[i].getTitle() + "_" +
@@ -34,6 +36,7 @@ TopicDA::TopicDA() : DataAccessor<Topic>(TopicSaveFilename)
 
 TopicDA::~TopicDA()
 {
+	/* Save the posts for each topic */
 	for (int i = 0; i < cacheData.count(); i++)
 	{
 		std::ofstream ofDataFile(cacheData[i].getTitle() + ".txt");
@@ -45,7 +48,7 @@ TopicDA::~TopicDA()
 			std::ofstream ofCommentFile(cacheData[i].getTitle() + "_" +
 				cacheData[i].posts[0].getTitle() + ".txt");
 
-
+			/* Saves the comments for each post */
 			if (cacheData[i].posts[0].reply.count() != 0)
 				ofCommentFile << cacheData[i].posts[0].reply[0];
 
@@ -82,6 +85,7 @@ Vector<std::string> TopicDA::getTopics()
 {
 	Vector<std::string> topicNames;
 
+	/* Gets the title of the topic and put them into an Vector and return it */
 	for (int i = 0; i < cacheData.count(); i++)
 		topicNames.push(cacheData[i].getTitle());
 	return topicNames;
@@ -94,6 +98,7 @@ Topic& TopicDA::getTopic(int nIndex)
 
 bool TopicDA::findTopic(std::string topicName)
 {
+
 	for (int i = 0; i < cacheData.count(); i++)
 		if (cacheData[i].getTitle() == topicName)
 			return true;
@@ -103,11 +108,13 @@ bool TopicDA::findTopic(std::string topicName)
 //use selection sort to sort topics by time created
 void TopicDA::sortByLatest()
 {
+	/* Uses selectionSort to sort by Latest */
 	Tools::selectionSort(cacheData, compareTime);
 }
 
 //use selection sort to sort topics by alphabet
 void TopicDA::sortByAlphabet()
 {
+	/* Yses selectionSort to sort by alphabet */
 	Tools::selectionSort(cacheData, compareTitle);
 }
