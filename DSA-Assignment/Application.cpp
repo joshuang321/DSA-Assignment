@@ -459,7 +459,7 @@ void Application::promptNewPost(Topic& topic)
 	getline(cin, postText);
 	cout << clrsr;
 
-	topic.addNewPost(Post(postText, acc->username));
+	topic.posts.push(Post(postText, acc->username));
 }
 
 void Application::handleViewPost(Post& post, std::string username)

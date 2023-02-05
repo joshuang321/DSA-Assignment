@@ -16,8 +16,8 @@ Post::Post() : Comment(), reply()
 { }
 
 Post::Post(const Post& post) :
-	Comment(post),
-	reply(post.reply)
+	reply(post.reply),
+	Comment(post)
 {
 #if defined (_DEBUG)
 	OutputDebugStringA("Post_CC\n");

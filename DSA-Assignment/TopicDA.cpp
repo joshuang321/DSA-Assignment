@@ -13,7 +13,7 @@ TopicDA::TopicDA() : DataAccessor<Topic>(TopicSaveFilename)
 		std::string strline;
 
 		while (std::getline(ifDataFile, strline))
-			cacheData[i].addNewPost(Post(strline));
+			cacheData[i].posts.push(Post(strline));
 	}
 }
 
@@ -40,7 +40,7 @@ Vector<std::string> TopicDA::getTopics()
 	Vector<std::string> topicNames;
 
 	for (int i = 0; i < cacheData.count(); i++)
-		topicNames.add(cacheData[i].getTitle());
+		topicNames.push(cacheData[i].getTitle());
 	return topicNames;
 }
 

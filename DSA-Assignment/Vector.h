@@ -74,7 +74,22 @@ public:
 		nElementCount = vec.nElementCount;
 	}
 
-	Vector& operator=(const Vector&) = default;
+	Vector& operator=(const Vector& vec)
+	{
+		if (ptr)
+			delete[] ptr;
+		ptr = NULL;
+		if (vec.ptr)
+		{
+			ptr = new T[vec.maxElements];
+			for (int i = 0; i < vec.nElementCount; i++)
+				ptr[i] = T(vec.ptr[i]);
+		}
+
+		maxElements = vec.maxElements;
+		nElementCount = vec.nElementCount;
+		return *this;
+	}
 	
 	Vector(Vector&& vec)
 	{
@@ -110,25 +125,6 @@ public:
 
 		ptr[nElementCount++] = std::move(item);
 		return &ptr[nElementCount - 1];
-	}
-
-	void add(T item)
-	{
-		if (ptr == NULL)
-			ptr = new T[maxElements];
-		else if (maxElements == (nElementCount + 1))
-		{
-			maxElements += 4;
-			T* new_ptr = new T[maxElements];
-
-			for (int i = 0; i < nElementCount; i++)
-				new_ptr[i] = std::move(ptr[i]);
-
-			delete[] ptr;
-			ptr = new_ptr;
-		}
-
-		ptr[nElementCount++] = item;
 	}
 
 	void pop(T& item)
