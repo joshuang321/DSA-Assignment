@@ -485,7 +485,7 @@ void Application::printViewPostMenu(Post& post)
 		<< "[" << fgblue << "L" << grdefault << "] Like Post" << endl
 		<< "[" << fggreen << "R" << grdefault << "] Create a new Reply" << endl;
 
-	if (post.getUsername() == acc->getUsername())
+	if (post.getUsername() == acc->username)
 	{
 		cout << "[" << fggreen << "P" << grdefault << "] Edit Post" << endl;
 		cout << "[" << fggreen << "D" << grdefault << "] Delete Post" << endl;
@@ -498,7 +498,13 @@ void Application::printViewPostMenu(Post& post)
 		<< fgmagenta << "Your Choice? " << grdefault << save;
 
 	cout << go_down_vts(3) << set_x_pos_vts(0)
-		<< fgcyan << "Replies:" << grdefault << endl << post.reply;
+		<< fgcyan << "Replies:" << grdefault << endl;
+		
+	for (int i = 0; i < post.reply.count(); i++)
+	{
+		cout << post.reply[i].getTitle() << endl;
+	}
+
 	cout << restore;
 }
 
@@ -509,15 +515,19 @@ bool Application::handleViewPostMenu(Topic& topic, Post& post, std::string usern
 	else if ("L" == choice)
 	{
 		post.addLike();
-
+		
 		cout << clrsr;
 	}
 	else if ("R" == choice)
 		promptNewReply(post);
-	else if (("P" == choice) && (post.getUsername() == acc->getUsername()))
+	else if (("P" == choice) && (post.getUsername() == username))
 		handleEditPost(topic, post);
-	else if (("D" == choice) && (post.getUsername() == acc->getUsername()))
+	else if (("D" == choice) && (post.getUsername() == username))
+	{
 		handleDeletePost(topic, post);
+
+		return false;
+	}
 
 	return true;
 }
@@ -529,7 +539,7 @@ void Application::promptNewReply(Post& post)
 	cout << "Enter reply: ";
 	getline(cin, postreply);
 
-	post.reply = postreply;
+	post.reply.push(Comment(postreply, acc->username));
 
 	cout << clrsr;
 }
@@ -537,6 +547,30 @@ void Application::promptNewReply(Post& post)
 bool Application::handleEditPost(Topic& topic, Post& post)
 {
 	string newText;
+	string username = post.getUsername();
+
+	cout << "Enter new post text: ";
+	getline(cin, newText);
+
+	if (newText.length() == 0)
+	{
+		cout << fgred << "Text cannot be empty!" << grdefault;
+		Sleep(SLP_UI_DELAY);
+		cout << delline << set_prev_n_line_vts(1) << delline;
+
+		return false;
+	}
+
+	topic.posts.pop(post);
+	topic.posts.push(Post(newText, username));
+	
+	cout << clrsr;
+	return true;
+}
+
+bool Application::handleDeletePost(Topic& topic, Post& post)
+{
+	topic.posts.pop(post);
 
 	return true;
 }

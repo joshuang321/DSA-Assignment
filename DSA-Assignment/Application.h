@@ -49,5 +49,6 @@ public:
 	bool handleViewPostMenu(Topic& topic, Post& post, std::string username, std::string choice);
 	void promptNewReply(Post& post);
 	bool handleEditPost(Topic& topic, Post& post);
+	bool handleDeletePost(Topic& topic, Post& post);
 };
 

@@ -40,13 +40,12 @@ Post::Post(string title, string username) :
 
 Post::Post(string strline) : Comment(strline.substr(0, strline.find_last_of(';')))
 {
-	size_t ndelim = strline.find_last_of(';');
-	reply = strline.substr(ndelim + 1, strline.length() - ndelim - 1);
+
 }
 
 std::ostream& operator<<(std::ostream& os, Post& post)
 {
-	os << ((Comment&)post) << ';' << post.reply;
+	os << ((Comment&)post);
 	return os;
 }
 

@@ -14,6 +14,15 @@ TopicDA::TopicDA() : DataAccessor<Topic>(TopicSaveFilename)
 
 		while (std::getline(ifDataFile, strline))
 			cacheData[i].posts.push(Post(strline));
+
+		for (int j = 0; j < cacheData[i].posts.count(); j++)
+		{
+			std::ifstream ifCommentFile(cacheData[i].getTitle() + "_" +
+				cacheData[i].posts[j].getTitle() + ".txt", std::ifstream::in);
+
+			while (std::getline(ifCommentFile, strline))
+				cacheData[i].posts[j].reply.push(Comment(strline));
+		}
 	}
 }
 
@@ -27,7 +36,17 @@ TopicDA::~TopicDA()
 			ofDataFile << cacheData[i].posts[0];
 
 		for (int j = 1; j < cacheData[i].posts.count(); j++)
+		{
 			ofDataFile << '\n' << cacheData[i].posts[j];
+
+			std::ofstream ofCommentFile(cacheData[i].getTitle() + "_" +
+				cacheData[i].posts[j].getTitle() + ".txt");
+
+			for (int k = 0; k < cacheData[i].posts[j].reply.count(); k++)
+			{
+				ofCommentFile << '\n' << cacheData[i].posts[j].reply[k];
+			}
+		}
 	}
 }
 

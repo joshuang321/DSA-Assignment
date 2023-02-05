@@ -9,16 +9,16 @@ private:
 	std::string username;
 	int likes;
 
-protected:
+public:
 	Comment();
 	Comment(const Comment& comment);
 	Comment& operator=(const Comment& comment) = default;
 	Comment(Comment&& comment);
 	Comment& operator=(Comment&&) = default;
 
-	Comment(std::string strline);
 	Comment(std::string title, std::string username);
-public:
+	Comment(std::string strline);
+
 	std::string getTitle();
 	std::string getTimeCreated();
 	std::string getUsername();

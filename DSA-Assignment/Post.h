@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <ctime>
+#include "Vector.h"
 #include "Comment.h"
 
 //
@@ -10,7 +11,7 @@ class Post : public Comment
 private:
 
 public:
-	std::string reply;
+	Vector<Comment> reply;
 
 	Post();
 	Post(const Post& post);
