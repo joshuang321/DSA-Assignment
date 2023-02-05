@@ -455,6 +455,15 @@ void Application::promptNewTopic(Vector<string>& topicNames)
 	cout << "Topic Description: ";
 	getline(cin, topicdesc);
 
+	//check if topic title is empty
+	if (topictitle.length() == 0 || topicdesc.length() == 0)
+	{
+		cout << fgred << "Topic title and description cannot be empty!" << grdefault << endl;
+		Sleep(SLP_UI_DELAY);
+
+		return;
+	}
+
 	//check if topic title already exists
 	if (!topicDA.findTopic(topictitle))
 	{
